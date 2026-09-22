@@ -14,26 +14,27 @@ const PRODUCT_LIMIT = 12;
 // Datos para el carrusel principal
 const slides = [
   {
-    image: '/images/tienda_de_ropa_deportiva.png',
+    image: '/images/Banner01.jpg',
     title: 'Eleva tu Rendimiento',
     subtitle: 'Diseño premium y tecnología de vanguardia para el atleta moderno.',
     cta: 'Ver colección',
     link: '/shop'
   },
   {
-    image: '/images/camisetas_de_futbol_04.png',
-    title: 'Velocidad y Estilo',
-    subtitle: 'Tecnología que te impulsa más allá de tus límites.',
-    cta: 'Descubre Novedades',
+    image: '/images/Banner02.jpg',
+    title: 'Eleva tu Rendimiento',
+    subtitle: 'Diseño premium y tecnología de vanguardia para el atleta moderno.',
+    cta: 'Ver colección',
     link: '/shop'
   },
   {
-    image: '/images/camisetas_de_futbol.png',
-    title: 'Flexibilidad sin Compromisos',
-    subtitle: 'Confort y diseño que se mueven contigo.',
-    cta: 'Explora Yoga',
+    image: '/images/Banner03.jpg',
+    title: 'Eleva tu Rendimiento',
+    subtitle: 'Diseño premium y tecnología de vanguardia para el atleta moderno.',
+    cta: 'Ver colección',
     link: '/shop'
-  }
+  },
+
 ];
 
 const BenefitsSection = () => (
@@ -65,41 +66,47 @@ export default function HomePage({ testimonials, products: serverProductGroups }
 
   return (
     <>
-      <Navbar />
-      <main>
-        <HeroCarousel slides={slides} />
-        <div className="py-16 sm:py-20">
-          <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-2xl font-bold tracking-tight text-stone-900 dark:text-white">Mas destacados</h2>
+      {/*
+      <div className="relative flex flex-col  bg-gradient-to-b from-[#0F88D1] via-stone-50 to-stone-100 to-[60%]">*/}
+      <div className="relative flex flex-col  ">
+        <Navbar />
+        <main>
+          <HeroCarousel slides={slides} />
+          <div className="py-16 sm:py-20">
 
-            {isLoading && <p className="text-center mt-6 text-stone-500">Cargando productos...</p>}
+            <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
+              <h2 className="text-2xl font-bold tracking-tight text-stone-900 dark:text-white">Mas destacados</h2>
 
-            <div className="mt-6 grid grid-cols-2 gap-2 sm:gap-4 lg:gap-6 sm:grid-cols-2 lg:grid-cols-5">
-              {displayedProductGroups
-                .filter(Boolean) // Filter out any null/undefined groups for robustness
-                .map((group) => (
-                  <ProductCard key={group.groupCode} group={group} />
-                ))}
-            </div>
+              {isLoading && <p className="text-center mt-6 text-stone-500">Cargando productos...</p>}
 
-            {productGroups && productGroups.length > PRODUCT_LIMIT && (
-              <div className="mt-12 text-center">
-                <Link href="/shop" className="inline-block bg-blue-600 text-white font-semibold px-8 py-3 rounded-lg hover:bg-blue-700 transition-colors">
-                  Ver más productos
-                </Link>
+              <div className="mt-6 grid grid-cols-2 gap-2 sm:gap-4 lg:gap-6 sm:grid-cols-2 lg:grid-cols-5">
+                {displayedProductGroups
+                    .filter(Boolean) // Filter out any null/undefined groups for robustness
+                    .map((group) => (
+                        <ProductCard key={group.groupCode} group={group} />
+                    ))}
               </div>
-            )}
+
+              {productGroups && productGroups.length > PRODUCT_LIMIT && (
+                  <div className="mt-12 text-center">
+                    <Link href="/shop" className="inline-block bg-blue-600 text-white font-semibold px-8 py-3 rounded-lg hover:bg-blue-700 transition-colors">
+                      Ver más productos
+                    </Link>
+                  </div>
+              )}
+            </div>
+            <GuaranteesSection />
+            <ModelingCarousel products={productGroups} /> {/* Pass grouped products to carousel */}
+            <TestimonialsSection testimonials={testimonials} />
+
+            <BenefitsSection />
           </div>
-          <GuaranteesSection />
-          <ModelingCarousel products={productGroups} /> {/* Pass grouped products to carousel */}
-          <TestimonialsSection testimonials={testimonials} />
-
-          <BenefitsSection />
-        </div>
 
 
-      </main>
-      <Footer />
+        </main>
+        <Footer />
+      </div>
+
     </>
   );
 }
