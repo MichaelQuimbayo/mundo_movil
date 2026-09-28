@@ -2,6 +2,29 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Custom scrollbar for horizontal carousels on mobile */
+@layer utilities {
+  .category-carousel::-webkit-scrollbar {
+    height: 4px;
+  }
+  .category-carousel::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .category-carousel::-webkit-scrollbar-thumb {
+    background-color: #d1d5db; /* gray-300 */
+    border-radius: 20px;
+  }
+  .dark .category-carousel::-webkit-scrollbar-thumb {
+    background-color: #4b5563; /* gray-600 */
+  }
+
+  /* Hide scrollbar on desktop */
+  @media (min-width: 768px) {
+    .hide-scrollbar-on-desktop::-webkit-scrollbar {
+      display: none;
+    }
+  }
+}
 @layer base {
   :root {
     /* Aquí puedes definir las fuentes que usarías, ej. desde Google Fonts */

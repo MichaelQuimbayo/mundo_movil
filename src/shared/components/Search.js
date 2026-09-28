@@ -11,7 +11,7 @@ export default function SearchModal() {
             {/* Botón / buscador del navbar */}
             <button
                 onClick={() => setOpen(true)}
-                className="flex w-full max-w-md items-center gap-3 rounded-lg border border-gray-200 bg-white px-4 py-2.5 text-sm text-gray-400 shadow-sm"
+                className="flex w-full max-w-lg items-center gap-3 rounded-lg border border-gray-400 bg-white px-4 py-2.5 text-sm text-gray-400 shadow-sm"
             >
                 <svg
                     className="h-5 w-5"

@@ -8,6 +8,7 @@ import GuaranteesSection from '../../../../shared/components/GuaranteesSection';
 import { useProducts } from '../../infrastructure/data/useProducts';
 import ModelingCarousel from '../components/ModelingCarousel';
 import HeroCarousel from '../../../../shared/components/HeroCarousel';
+import CategoryCarousel from '../components/CategoryCarousel';
 
 const PRODUCT_LIMIT = 12;
 
@@ -72,9 +73,11 @@ export default function HomePage({ testimonials, products: serverProductGroups }
         <Navbar />
         <main>
           <HeroCarousel slides={slides} />
-          <div className="py-16 sm:py-20">
+          <div className="py-8 sm:py-16">
 
             <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
+              <CategoryCarousel />
+
               <h2 className="text-2xl font-bold tracking-tight text-stone-900 dark:text-white">Mas destacados</h2>
 
               {isLoading && <p className="text-center mt-6 text-stone-500">Cargando productos...</p>}

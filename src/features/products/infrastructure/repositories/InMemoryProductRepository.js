@@ -2,7 +2,7 @@ import { IProductRepository } from '../../domain/repositories/IProductRepository
 import { toDomain } from '../mappers/ProductMapper';
 import { groupProducts } from '../../application/services/productGrouping';
 
-const API_URL = 'https://us-central1-toolx-cloud-pos.cloudfunctions.net/api/v1/workspaces/av_store/materials';
+const API_URL = 'https://us-central1-toolx-cloud-pos.cloudfunctions.net/api/v1/workspaces/mundo-movil/materials';
 
 export class InMemoryProductRepository extends IProductRepository {
   constructor() {

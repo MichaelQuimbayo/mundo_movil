@@ -3,7 +3,7 @@ import { useMemo } from 'react';
 import { toDomain as productMapper } from '../mappers/ProductMapper';
 import { groupProducts } from '../../application/services/productGrouping';
 
-const API_URL = 'https://us-central1-toolx-cloud-pos.cloudfunctions.net/api/v1/workspaces/av_store/materials';
+const API_URL = 'https://us-central1-toolx-cloud-pos.cloudfunctions.net/api/v1/workspaces/mundoMovil/materials';
 
 /**
  * Custom hook to fetch, parse, map, and group product data.

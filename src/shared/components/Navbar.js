@@ -62,17 +62,12 @@ const Navbar = () => {
 
             {/* --- SECCIÓN CENTRAL --- */}
             {/* En móvil, contiene el logo centrado. En desktop, la navegación centrada. */}
-            <div className="md:absolute md:left-1/2 md:top-1/2 md:-translate-x-1/2 md:-translate-y-1/2">
-              <div className="lg:hidden">
-                <Link href="/" className="font-serif text-2xl font-bold text-stone-900 dark:text-white whitespace-nowrap">
-                  MUNDO MOVIL
-                </Link>
-              </div>
-              <div className="hidden lg:flex h-full items-center space-x-8">
-                <NavLink href="/">Categorias</NavLink>
-                <NavLink href="/category/hombre">ofertas</NavLink>
-                <NavLink href="/category/mujer">Mis compras</NavLink>
-              </div>
+            <div className="md:absolute md:left-1/2 md:top-1/2 md:-translate-x-1/2 md:-translate-y-1/2 w-1/4">
+              
+              <SearchModal>
+
+              </SearchModal>
+
             </div>
 
             {/* --- SECCIÓN DERECHA --- */}
@@ -82,14 +77,18 @@ const Navbar = () => {
               {/*<button onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')} className="hidden sm:block p-2 rounded-full text-stone-500 hover:text-stone-900 dark:text-stone-400 dark:hover:text-white transition-colors" aria-label="Toggle dark mode">
                 {theme === 'dark' ? <Sun size={22} /> : <Moon size={22} />}
                 </button>*/}
-              <SearchModal>
 
-              </SearchModal>
               <Link href="/favorites"
-                    className="p-2 rounded-full text-stone-500 hover:text-stone-900 dark:text-stone-400 dark:hover:text-white transition-colors"
+                    className="hidden p-2 rounded-full text-stone-500 hover:text-stone-900 dark:text-stone-400 dark:hover:text-white transition-colors"
                     aria-label="Favoritos">
                 <Heart size={22} className={router.pathname === '/favorites' ? 'text-blue-600 fill-blue-600' : ''}/>
               </Link>
+
+              <div className="hidden lg:flex h-full items-center space-x-6 whitespace-nowrap ">
+                <NavLink href=""><span>Crea tu cuenta</span></NavLink>
+                <NavLink href="/category/hombre">Ingresa</NavLink>
+                <NavLink href="/category/mujer">Mis compras</NavLink>
+              </div>
               <button onClick={toggleCart}
                       className="relative p-2 rounded-full text-stone-500 hover:text-stone-900 dark:text-stone-400 dark:hover:text-white transition-colors"
                       aria-label="Open cart">
