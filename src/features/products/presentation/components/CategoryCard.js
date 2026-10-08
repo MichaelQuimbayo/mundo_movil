@@ -6,12 +6,12 @@ export default function CategoryCard({ category }) {
   return (
     <Link href={`/category/${category.name}`} className="flex-shrink-0 group">
       {/* Mobile view: Tag-like */}
-      <div className="md:hidden bg-stone-200 dark:bg-stone-700 rounded-full py-2 px-5">
-        <p className="text-stone-800 dark:text-stone-100 font-semibold whitespace-nowrap">{displayName}</p>
+      <div className="md:hidden bg-blue-500 dark:bg-blue-800 rounded-full py-2 px-5">
+        <p className="text-stone-50 dark:text-stone-100 font-semibold whitespace-nowrap">{displayName}</p>
       </div>
 
       {/* Desktop view: Full card */}
-      <div className="hidden md:flex items-center bg-white dark:bg-stone-800 rounded-lg shadow-md overflow-hidden transform group-hover:scale-105 transition-transform duration-300 w-80">
+      <div className="hidden md:flex items-center bg-white dark:bg-blue-800 rounded-lg shadow-md overflow-hidden transform group-hover:scale-105 transition-transform duration-300 w-80">
         <div className="w-1/3">
           <img src={category.image} alt={`Categoría ${displayName}`} className="object-cover h-32 w-full"/>
         </div>
