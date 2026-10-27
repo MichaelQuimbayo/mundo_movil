@@ -240,7 +240,6 @@ export default function ProductDetailPage({ productGroup: serverProductGroup, cu
               )}
               {allAvailableSizes.length > 0 && (
                 <div className="mt-8">
-                  <h3 className="text-sm font-medium">Talla: <span className="font-semibold">{selectedSize}</span></h3>
                   <div className="flex flex-wrap gap-2 mt-3">
                     {allAvailableSizes.map((size) => (
                       <button key={size} type="button" onClick={() => dispatch({ type: 'SELECT_SIZE', payload: { size, variants: productGroupEntities } })} disabled={!validSizesForSelectedColor.includes(size)} className={`border rounded-lg py-2 px-4 text-sm font-medium transition-colors ${selectedSize === size ? 'bg-stone-900 text-white' : 'border-stone-300 hover:bg-stone-100'} ${!validSizesForSelectedColor.includes(size) ? 'opacity-30 cursor-not-allowed' : ''}`}>

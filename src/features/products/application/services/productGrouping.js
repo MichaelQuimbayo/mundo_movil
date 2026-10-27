@@ -29,9 +29,9 @@ export const groupProducts = (materials) => {
   const groups = new Map();
 
   for (const material of materials) {
-    const groupCode = material.codes?.find(
-      (c) => c.code_type_lbl === GROUP_CODE_TYPE
-    )?.code;
+    const groupCode = material.groupCode || material.features?.find(
+      (f) => f.entity_type === 'grupo_producto'
+    )?.value;
 
     const key = groupCode ?? `single_${material.id}`;
 

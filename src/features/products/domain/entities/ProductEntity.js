@@ -94,11 +94,20 @@ export class ProductEntity {
   }
 
   /**
-   * Gets the size of this specific product variant.
+   * Gets the size/storage of this specific product variant.
    * @returns {string | null}
    */
   get size() {
-    const sizeFeature = this.features.find(f => f.entity_type === 'size');
+    const sizeFeature = this.features.find(f => f.entity_type === 'almacenamiento' || f.entity_type === 'type' || f.entity_type === 'size');
     return sizeFeature?.value || null;
+  }
+
+  /**
+   * Gets the group code for the product group.
+   * @returns {string}
+   */
+  get groupCode() {
+    const groupFeature = this.features.find(f => f.entity_type === 'grupo_producto');
+    return groupFeature?.value || this.id;
   }
 }

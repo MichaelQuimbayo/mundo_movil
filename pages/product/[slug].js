@@ -22,7 +22,7 @@ export async function getServerSideProps(context) {
     return { notFound: true };
   }
 
-  const groupCode = currentVariant.codes?.find(c => c.code_type_lbl === 'group_code')?.code;
+  const groupCode = currentVariant.groupCode || currentVariant.codes?.find(c => c.code_type_lbl === 'group_code')?.code;
 
   let productGroup;
   if (groupCode) {

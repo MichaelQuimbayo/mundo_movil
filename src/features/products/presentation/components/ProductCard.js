@@ -3,13 +3,17 @@ import Link from 'next/link';
 import { Truck, Heart, Star } from 'lucide-react';
 import { useFavorites } from '../../../../shared/context/FavoritesContext';
 
-// A helper function to format the price range
-const formatPriceRange = (priceRange) => {
+// A helper function to format the minimum price
+const formatMinPrice = (priceRange) => {
   if (!priceRange) return '';
-  if (priceRange.min === priceRange.max) {
-    return `$${priceRange.min.toLocaleString('es-CO')}`;
-  }
-  return `$${priceRange.min.toLocaleString('es-CO')} - $${priceRange.max.toLocaleString('es-CO')}`;
+  const minPrice = priceRange.min !== undefined ? priceRange.min : 0;
+  const formatter = new Intl.NumberFormat('es-CO', {
+    style: 'currency',
+    currency: 'COP',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  });
+  return formatter.format(minPrice).replace(/\s/g, '');
 };
 
 // Componente para mostrar las estrellas de calificación
@@ -104,7 +108,7 @@ const ProductCard = ({ group }) => {
           
           <div className="flex-grow">
             <p className="text-xl sm:text-2xl font-semibold text-stone-900 dark:text-white">
-              {formatPriceRange(group.priceRange)}
+              {formatMinPrice(group.priceRange)}
             </p>
           </div>
 

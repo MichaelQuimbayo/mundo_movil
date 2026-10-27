@@ -38,13 +38,14 @@ export class InMemoryProductRepository extends IProductRepository {
 
   async getProductById(id) {
     try {
-      const response = await fetch(`${API_URL}/${id}`);
+      const response = await fetch(API_URL);
       if (!response.ok) {
         if (response.status === 404) return null;
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-      const rawMaterial = await response.json();
-      return toDomain(rawMaterial);
+      const rawMaterials = await response.json();
+      const rawMaterial = rawMaterials.find(m => m.id === id);
+      return rawMaterial ? toDomain(rawMaterial) : null;
     } catch (error) {
       console.error(`Error fetching product with ID ${id}:`, error);
       return null;

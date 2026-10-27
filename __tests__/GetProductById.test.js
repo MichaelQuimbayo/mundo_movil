@@ -1,5 +1,5 @@
-import { GetProductById } from '../src/core/usecases/GetProductById';
-import { IProductRepository } from '../src/core/ports/IProductRepository';
+import { GetProductById } from '../src/features/products/application/useCases/GetProductById';
+import { IProductRepository } from '../src/features/products/domain/repositories/IProductRepository';
 
 // 1. Creamos un "mock" del repositorio.
 // Esta es una implementación falsa que controlamos para el test.
