@@ -167,7 +167,7 @@ export default function ProductDetailPage({ productGroup: serverProductGroup, cu
     e.preventDefault();
     if (!activeVariant || activeVariant.stock <= 0) return;
     addToCart(activeVariant, quantity); // FIX: Pass the class instance directly
-    if (actionType === 'buy') router.push('/checkout');
+    if (actionType === 'buy') router.push('/whatsapp-checkout');
     else showMessage(`¡'${displayVariant.name}' (${selectedColor}, ${selectedSize}) añadido al carrito!`);
   };
   

@@ -21,7 +21,7 @@ const InputField = ({ id, label, optional = false, fullWidth = false, ...props }
             id={id}
             name={id}
             placeholder={label + (optional ? ' (opcional)' : '')}
-            className="w-full px-3 py-2 border border-stone-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+            className="w-full px-4 py-3 border border-stone-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500       sm:text-sm"
             {...props}
         />
     </div>
@@ -33,7 +33,7 @@ const SelectField = ({ id, label, options, fullWidth = false }) => (
         <select
             id={id}
             name={id}
-            className="w-full appearance-none bg-white px-3 py-2 border border-stone-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+            className="w-full appearance-none bg-white px-4 py-3 border border-stone-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
         >
             {options.map((opt) => (
                 <option key={opt.value} value={opt.value}>{opt.label}</option>
@@ -71,30 +71,30 @@ const RadioSelect = ({ value, label, sublabel, selected, onChange, icon }) => (
 // Order Summary
 const OrderSummary = ({ cartItems, getCartTotal, shippingCost, total }) => (
     <div>
-        <div className="space-y-5">
+        <div className="space-y-6">
             {cartItems.length > 0 ? (
                 cartItems.map((item) => (
-                    <div key={item.variantId} className="flex items-center gap-4">
+                    <div key={item.variantId} className="flex items-center gap-5">
 
-                        <div className="relative w-16 h-16 rounded-lg bg-stone-200 border border-stone-200">
+                        <div className="relative w-20 h-20 rounded-lg bg-stone-200 border border-stone-200 flex-shrink-0">
                             <img
-                                src={item.image || 'https://via.placeholder.com/64'}
+                                src={item.image || 'https://via.placeholder.com/80'}
                                 alt={item.name}
                                 className="w-full h-full object-cover rounded-md"
                             />
-                            <span className="absolute -top-2 -right-2 flex items-center justify-center w-6 h-6 text-xs font-medium text-white bg-stone-600 rounded-full">
+                            <span className="absolute -top-2 -right-2 flex items-center justify-center w-7 h-7 text-sm font-medium text-white bg-stone-600 rounded-full shadow">
                 {item.quantity}
               </span>
                         </div>
 
                         <div className="flex-grow">
-                            <h3 className="font-semibold text-sm text-stone-800">{item.name}</h3>
-                            <p className="text-sm text-stone-500">
+                            <h3 className="font-semibold text-base text-stone-900">{item.name}</h3>
+                            <p className="text-sm sm:text-base text-stone-600">
                                 {item.size} / {item.color}
                             </p>
                         </div>
 
-                        <p className="font-semibold text-sm text-stone-800">
+                        <p className="font-semibold text-base text-stone-900 whitespace-nowrap">
                             {formatCurrency(item.price * item.quantity)}
                         </p>
 
@@ -204,9 +204,9 @@ const CheckoutPage = () => {
                 <div className="lg:grid lg:grid-cols-2">
 
                     {/* FORMULARIO */}
-                    <div className="py-12 px-4 sm:px-6 lg:border-r lg:pl-12 xl:pl-20  lg:pb-12">
+                    <div className="py-12 px-4 sm:px-6 lg:border-r lg:pl-12 xl:pl-20 lg:pb-12">
 
-                        <div className="max-w-lg lg:max-w-lg lg:w-full lg:ml-auto lg:mr-0">
+                        <div className="max-w-2xl lg:w-full lg:ml-auto lg:mr-8">
 
 
                             <form id="checkout-form" className="space-y-8">
@@ -411,7 +411,7 @@ const CheckoutPage = () => {
 
                         <div className="py-12 px-4 sm:px-6 lg:pr-12 xl:pr-20 sticky top-0 h-screen overflow-y-auto">
 
-                            <div className="max-w-lg lg:w-full lg:ml-0 lg:mr-auto">
+                            <div className="max-w-2xl lg:w-full lg:ml-0 lg:mr-auto">
 
                                 <h2 className="text-xl font-semibold mb-6">
                                     Resumen del pedido

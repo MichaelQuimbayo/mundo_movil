@@ -21,7 +21,7 @@ const Cart = ({ isOpen, onClose }) => {
 
   const handleCheckout = () => {
     onClose();
-    router.push('/checkout');
+    router.push('/whatsapp-checkout');
   };
 
   if (!isOpen) return null;
