@@ -215,23 +215,23 @@ export default function ProductDetailPage({ productGroup: serverProductGroup, cu
           </div>
 
           {/* Details Section */}
-          <div className="mt-8 md:mt-0">
+          <div className="mt-6 md:mt-0">
             <div className="flex justify-between items-start">
-              <h1 className="font-serif text-4xl sm:text-5xl font-medium tracking-tight">{displayVariant.name}</h1>
+              <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight text-stone-900">{displayVariant.name}</h1>
               <button onClick={() => toggleFavorite(displayVariant.groupCode)} className="p-2 rounded-full hover:bg-stone-100 transition-colors ml-4">
-                <Heart className={`transition-colors ${isMounted && isFavorite(displayVariant.groupCode) ? 'text-red-500 fill-current' : 'text-stone-500'}`} size={28}/>
+                <Heart className={`transition-colors ${isMounted && isFavorite(displayVariant.groupCode) ? 'text-red-500 fill-current' : 'text-stone-500'}`} size={24}/>
               </button>
             </div>
-            <div className="mt-4 space-y-4">
-              <p className="text-stone-600 text-lg">{displayVariant.description}</p>
+            <div className="mt-3 space-y-3">
+              <p className="text-stone-600 text-sm sm:text-base leading-relaxed">{displayVariant.description}</p>
               <ProductRating rating={rating} reviewCount={reviewCount} />
             </div>
-            <p className="text-3xl font-bold mt-6">{displayVariant.displayPrice}</p>
-            <form className="mt-10">
+            <p className="text-2xl sm:text-3xl font-bold text-stone-900 mt-4">{displayVariant.displayPrice}</p>
+            <form className="mt-6 space-y-6">
               {allAvailableColors.length > 1 && (
                 <div>
-                  <h3 className="text-sm font-medium">Color: <span className="font-semibold">{selectedColor}</span></h3>
-                  <div className="flex items-center space-x-3 mt-3">
+                  <h3 className="text-xs sm:text-sm font-medium text-stone-700">Color: <span className="font-semibold text-stone-900">{selectedColor}</span></h3>
+                  <div className="flex items-center space-x-3 mt-2">
                     {allAvailableColors.map((color) => (
                       <button key={color} type="button" onClick={() => dispatch({ type: 'SELECT_COLOR', payload: { color, variants: productGroupEntities } })} className={`h-8 w-8 rounded-full border border-stone-300 ${selectedColor === color ? 'ring-2 ring-offset-2 ring-blue-500' : ''}`} style={{ backgroundColor: color.toLowerCase() }} />
                     ))}
@@ -239,29 +239,30 @@ export default function ProductDetailPage({ productGroup: serverProductGroup, cu
                 </div>
               )}
               {allAvailableSizes.length > 0 && (
-                <div className="mt-8">
-                  <div className="flex flex-wrap gap-2 mt-3">
+                <div>
+                  <h3 className="text-xs sm:text-sm font-medium text-stone-700 mb-2">Almacenamiento</h3>
+                  <div className="flex flex-wrap gap-2">
                     {allAvailableSizes.map((size) => (
-                      <button key={size} type="button" onClick={() => dispatch({ type: 'SELECT_SIZE', payload: { size, variants: productGroupEntities } })} disabled={!validSizesForSelectedColor.includes(size)} className={`border rounded-lg py-2 px-4 text-sm font-medium transition-colors ${selectedSize === size ? 'bg-stone-900 text-white' : 'border-stone-300 hover:bg-stone-100'} ${!validSizesForSelectedColor.includes(size) ? 'opacity-30 cursor-not-allowed' : ''}`}>
+                      <button key={size} type="button" onClick={() => dispatch({ type: 'SELECT_SIZE', payload: { size, variants: productGroupEntities } })} disabled={!validSizesForSelectedColor.includes(size)} className={`border rounded-md py-2 px-4 text-xs sm:text-sm font-medium transition-colors ${selectedSize === size ? 'bg-stone-900 text-white border-stone-900' : 'border-stone-300 hover:bg-stone-100 text-stone-800'} ${!validSizesForSelectedColor.includes(size) ? 'opacity-30 cursor-not-allowed' : ''}`}>
                         {size}
                       </button>
                     ))}
                   </div>
                 </div>
               )}
-              <div className="mt-4"><p className="text-sm font-medium text-gray-900">Disponible: {activeVariant.stock > 0 ? activeVariant.stock : 'Agotado'}</p></div>
-              <div className="mt-8">
-                <h3 className="text-sm font-medium">Cantidad</h3>
-                <div className="flex items-center border border-stone-300 rounded-lg mt-3" style={{ width: 'fit-content' }}>
-                  <button type="button" onClick={() => dispatch({ type: 'SET_QUANTITY', payload: { quantity: quantity - 1 }})} className="p-3"><Minus size={16} /></button>
-                  <span className="px-4">{quantity}</span>
-                  <button type="button" onClick={() => dispatch({ type: 'SET_QUANTITY', payload: { quantity: quantity + 1 }})} className="p-3 disabled:opacity-30" disabled={quantity >= activeVariant.stock}><Plus size={16} /></button>
+              <div><p className="text-xs sm:text-sm text-stone-600">Disponible: <span className="font-medium text-stone-900">{activeVariant.stock > 0 ? activeVariant.stock : 'Agotado'}</span></p></div>
+              <div>
+                <h3 className="text-xs sm:text-sm font-medium text-stone-700 mb-2">Cantidad</h3>
+                <div className="flex items-center border border-stone-300 rounded-md" style={{ width: 'fit-content' }}>
+                  <button type="button" onClick={() => dispatch({ type: 'SET_QUANTITY', payload: { quantity: quantity - 1 }})} className="p-2 text-stone-600 hover:text-stone-900"><Minus size={14} /></button>
+                  <span className="px-4 text-sm font-medium">{quantity}</span>
+                  <button type="button" onClick={() => dispatch({ type: 'SET_QUANTITY', payload: { quantity: quantity + 1 }})} className="p-2 text-stone-600 hover:text-stone-900 disabled:opacity-30" disabled={quantity >= activeVariant.stock}><Plus size={14} /></button>
                 </div>
               </div>
-              <div className="mt-8 space-y-4">
-                <button type="button" onClick={(e) => handleAction(e, 'buy')} disabled={activeVariant.stock <= 0} className="w-full bg-blue-600 text-white py-4 px-8 rounded-lg font-semibold hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed">Comprar ahora</button>
-                <button type="button" onClick={(e) => handleAction(e, 'add')} disabled={activeVariant.stock <= 0} className="w-full bg-transparent border border-blue-600 text-blue-600 py-4 px-8 rounded-lg font-semibold hover:bg-blue-50 disabled:opacity-50 disabled:cursor-not-allowed">Añadir al carrito</button>
-                {addedToCartMessage && <div className="mt-2 text-center text-green-600"><p>{addedToCartMessage}</p></div>}
+              <div className="space-y-3 pt-2">
+                <button type="button" onClick={(e) => handleAction(e, 'buy')} disabled={activeVariant.stock <= 0} className="w-full bg-blue-600 text-white py-3 px-6 rounded-lg font-medium text-sm sm:text-base hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm">Comprar ahora</button>
+                <button type="button" onClick={(e) => handleAction(e, 'add')} disabled={activeVariant.stock <= 0} className="w-full bg-blue-50 border border-blue-600 text-blue-600 py-3 px-6 rounded-lg font-medium text-sm sm:text-base hover:bg-blue-100 disabled:opacity-50 disabled:cursor-not-allowed">Añadir al carrito</button>
+                {addedToCartMessage && <div className="text-center text-green-600 text-sm font-medium"><p>{addedToCartMessage}</p></div>}
               </div>
             </form>
             <div className="mt-10 pt-6 border-t">

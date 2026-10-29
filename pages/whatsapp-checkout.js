@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useCart } from '../src/shared/context/CartContext';
 import Navbar from '../src/shared/components/Navbar';
-import { ChevronDown, HelpCircle, CreditCard, Building2, Truck, MessageCircle } from 'lucide-react';
+import { ChevronDown, HelpCircle, CreditCard, Building2, Truck, MessageCircle, Loader2 } from 'lucide-react';
 
 // Helper to format currency
 const formatCurrency = (amount) => {
@@ -127,7 +127,7 @@ const OrderSummary = ({ cartItems, getCartTotal, shippingCost, total }) => (
 );
 
 // Mobile accordion
-const MobileOrderSummary = ({ cartItems, getCartTotal, shippingCost, total }) => {
+const MobileOrderSummary = ({ cartItems, getCartTotal, shippingCost, total, isSubmitting }) => {
     const [isOpen, setIsOpen] = useState(false);
 
     return (
@@ -165,10 +165,11 @@ const MobileOrderSummary = ({ cartItems, getCartTotal, shippingCost, total }) =>
                 <button
                     type="submit"
                     form="whatsapp-checkout-form"
-                    className="w-full bg-emerald-600 text-white font-semibold py-3 px-6 rounded-lg text-md hover:bg-emerald-700 transition-colors flex items-center justify-center gap-2 shadow-md"
+                    disabled={isSubmitting || cartItems.length === 0}
+                    className="w-full bg-emerald-600 text-white font-semibold py-3 px-6 rounded-lg text-md hover:bg-emerald-700 transition-colors flex items-center justify-center gap-2 shadow-md disabled:opacity-50"
                 >
-                    <MessageCircle size={20} />
-                    Enviar pedido por WhatsApp
+                    {isSubmitting ? <Loader2 className="animate-spin" size={20} /> : <MessageCircle size={20} />}
+                    {isSubmitting ? 'Registrando pedido...' : 'Enviar pedido por WhatsApp'}
                 </button>
             </div>
         </div>
@@ -181,14 +182,24 @@ export default function CheckoutWhatsapp() {
     // States for selections
     const [paymentMethod, setPaymentMethod] = useState('transferencia');
     const [billingAddress, setBillingAddress] = useState('same');
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
 
     // Fixed shipping cost
     const shippingCost = 18000;
     const shippingLabel = 'Envío Nacional Estándar';
     const total = getCartTotal() + shippingCost;
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
+        if (cartItems.length === 0) {
+            setErrorMessage('El carrito está vacío.');
+            return;
+        }
+
+        setIsSubmitting(true);
+        setErrorMessage('');
+
         const formData = new FormData(e.target);
         const data = Object.fromEntries(formData.entries());
 
@@ -197,8 +208,54 @@ export default function CheckoutWhatsapp() {
             contraentrega: 'Pago Contra Entrega'
         };
 
-        // Construct WhatsApp message
+        const spaceId = `web_order_${Date.now()}`;
+        const workspaceId = 'mundo-movil';
+
+        // Prepare simplified payload for ToolX Cloud POS spaces-quick endpoint
+        const posPayload = {
+            name: `Pedido Web - ${data.firstName || ''} ${data.lastName || ''}`.trim(),
+            order: Date.now(),
+            customer: {
+                name: `${data.firstName || ''} ${data.lastName || ''}`.trim(),
+                cellphone: data.phone || '',
+                email: data.email || 'web@mundomovil.com'
+            },
+            delivery_info: {
+                cellphone: data.phone || '',
+                information: `${data.address || ''} ${data.apartment ? '(' + data.apartment + ')' : ''}, ${data.city || ''} (Cédula: ${data.cedula || 'N/A'})`
+            },
+            amounts: {
+                [paymentMethod.toUpperCase()]: total
+            },
+            items: cartItems.map(item => ({
+                materialId: item.variantId,
+                quantity: item.quantity
+            }))
+        };
+
+        try {
+            // 1. Register order in POS backend
+            const response = await fetch(`https://us-central1-toolx-cloud-pos.cloudfunctions.net/api/v1/workspaces/${workspaceId}/spaces-quick/${spaceId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(posPayload),
+            });
+
+            if (!response.ok) {
+                console.warn('POS sync warning:', response.statusText);
+            }
+        } catch (err) {
+            console.error('Error syncing order to POS:', err);
+            // We still proceed to WhatsApp even if POS sync has a network issue
+        } finally {
+            setIsSubmitting(false);
+        }
+
+        // 2. Construct WhatsApp message
         let message = `🛍️ *NUEVA ORDEN - MUNDO MÓVIL* 🛍️\n\n`;
+        message += `🆔 *ID Pedido:* #${spaceId}\n`;
         message += `👤 *Datos del Cliente:*\n`;
         message += `• Nombre: ${data.firstName || ''} ${data.lastName || ''}\n`;
         if (data.cedula) message += `• Cédula: ${data.cedula}\n`;
@@ -225,7 +282,7 @@ export default function CheckoutWhatsapp() {
         message += `_Quedo atento a la confirmación de mi pedido. ¡Gracias!_`;
 
         // WhatsApp number for Mundo Móvil
-        const whatsappNumber = '573000000000'; // Replace with actual number
+        const whatsappNumber = '573112369188'; // Replace with actual store number
         const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
 
         window.open(whatsappUrl, '_blank');
@@ -244,9 +301,15 @@ export default function CheckoutWhatsapp() {
                             <div className="mb-6 bg-emerald-50 border border-emerald-200 p-4 rounded-lg flex items-center gap-3 text-emerald-800">
                                 <MessageCircle size={24} className="text-emerald-600 flex-shrink-0" />
                                 <p className="text-sm font-medium">
-                                    ¡Estás a un paso! Completa tus datos y selecciona tu método de pago para enviar tu pedido directamente por WhatsApp.
+                                    ¡Estás a un paso! Completa tus datos y selecciona tu método de pago para registrar tu pedido y enviarlo por WhatsApp.
                                 </p>
                             </div>
+
+                            {errorMessage && (
+                                <div className="mb-6 bg-red-50 border border-red-200 p-4 rounded-lg text-red-700 text-sm">
+                                    {errorMessage}
+                                </div>
+                            )}
 
                             <form id="whatsapp-checkout-form" onSubmit={handleSubmit} className="space-y-8">
 
@@ -414,10 +477,11 @@ export default function CheckoutWhatsapp() {
 
                                 <button
                                     type="submit"
-                                    className="hidden lg:flex w-full bg-emerald-600 text-white font-semibold py-4 px-6 rounded-lg text-lg hover:bg-emerald-700 transition-colors items-center justify-center gap-3 shadow-lg"
+                                    disabled={isSubmitting || cartItems.length === 0}
+                                    className="hidden lg:flex w-full bg-emerald-600 text-white font-semibold py-4 px-6 rounded-lg text-lg hover:bg-emerald-700 transition-colors items-center justify-center gap-3 shadow-lg disabled:opacity-50"
                                 >
-                                    <MessageCircle size={24} />
-                                    Enviar pedido por WhatsApp
+                                    {isSubmitting ? <Loader2 className="animate-spin" size={24} /> : <MessageCircle size={24} />}
+                                    {isSubmitting ? 'Registrando pedido...' : 'Enviar pedido por WhatsApp'}
                                 </button>
 
                                 <MobileOrderSummary
@@ -425,6 +489,7 @@ export default function CheckoutWhatsapp() {
                                     getCartTotal={getCartTotal}
                                     shippingCost={shippingCost}
                                     total={total}
+                                    isSubmitting={isSubmitting}
                                 />
 
                             </form>
