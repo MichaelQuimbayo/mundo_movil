@@ -228,7 +228,7 @@ export default function CheckoutWhatsapp() {
                 [paymentMethod.toUpperCase()]: total
             },
             items: cartItems.map(item => ({
-                materialId: item.variantId,
+                materialId: item.id,
                 quantity: item.quantity
             }))
         };
