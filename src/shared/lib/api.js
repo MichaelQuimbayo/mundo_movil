@@ -1,5 +1,5 @@
 const APP_API_URL = process.env.NEXT_PUBLIC_API_URL || '/api';
-const MATERIALS_API_URL = 'https://us-central1-toolx-cloud-pos.cloudfunctions.net/api/v1/workspaces/av_store/materials';
+const MATERIALS_API_URL = 'https://us-central1-toolx-cloud-pos.cloudfunctions.net/api/v1/workspaces/mundo-movil/materials';
 
 /**
  * A generic fetcher function for use with SWR.
