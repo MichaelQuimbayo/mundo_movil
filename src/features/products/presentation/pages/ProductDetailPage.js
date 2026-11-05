@@ -228,12 +228,14 @@ export default function ProductDetailPage({ productGroup: serverProductGroup, cu
             </div>
             <p className="text-2xl sm:text-3xl font-bold text-stone-900 mt-4">{displayVariant.displayPrice}</p>
             <form className="mt-6 space-y-6">
-              {allAvailableColors.length > 1 && (
+              {allAvailableColors.length > 0 && (
                 <div>
-                  <h3 className="text-xs sm:text-sm font-medium text-stone-700">Color: <span className="font-semibold text-stone-900">{selectedColor}</span></h3>
-                  <div className="flex items-center space-x-3 mt-2">
+                  <h3 className="text-xs sm:text-sm font-medium text-stone-700 mb-2">Color: <span className="font-semibold text-stone-900">{selectedColor}</span></h3>
+                  <div className="flex flex-wrap gap-2">
                     {allAvailableColors.map((color) => (
-                      <button key={color} type="button" onClick={() => dispatch({ type: 'SELECT_COLOR', payload: { color, variants: productGroupEntities } })} className={`h-8 w-8 rounded-full border border-stone-300 ${selectedColor === color ? 'ring-2 ring-offset-2 ring-blue-500' : ''}`} style={{ backgroundColor: color.toLowerCase() }} />
+                      <button key={color} type="button" onClick={() => dispatch({ type: 'SELECT_COLOR', payload: { color, variants: productGroupEntities } })} className={`border rounded-md py-2 px-4 text-xs sm:text-sm font-medium transition-colors ${selectedColor === color ? 'bg-stone-900 text-white border-stone-900' : 'border-stone-300 hover:bg-stone-100 text-stone-800'}`}>
+                        {color}
+                      </button>
                     ))}
                   </div>
                 </div>
