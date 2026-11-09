@@ -4,7 +4,7 @@ import { Gem, Tag, ShieldCheck } from 'lucide-react';
 const guarantees = [
   {
     name: 'Calidad Premium',
-    description: 'Utilizamos los mejores materiales para asegurar durabilidad, comodidad y un rendimiento superior en cada prenda.',
+    description: 'Utilizamos los mejores componentes para asegurar durabilidad y un rendimiento superior en cada dispositivo.',
     icon: Gem,
   },
   {

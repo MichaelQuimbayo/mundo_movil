@@ -4,16 +4,29 @@ import { Truck, Heart, Star } from 'lucide-react';
 import { useFavorites } from '../../../../shared/context/FavoritesContext';
 
 // A helper function to format the minimum price
-const formatMinPrice = (priceRange) => {
-  if (!priceRange) return '';
-  const minPrice = priceRange.min !== undefined ? priceRange.min : 0;
-  const formatter = new Intl.NumberFormat('es-CO', {
-    style: 'currency',
-    currency: 'COP',
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0,
-  });
-  return formatter.format(minPrice).replace(/\s/g, '');
+const formatMinPrice = (priceRange, variants) => {
+  if (priceRange && priceRange.min !== undefined) {
+    const minPrice = priceRange.min;
+    const formatter = new Intl.NumberFormat('es-CO', {
+      style: 'currency',
+      currency: 'COP',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    });
+    return formatter.format(minPrice).replace(/\s/g, '');
+  }
+  if (variants && variants.length > 0) {
+    const prices = variants.map(v => v.price).filter(p => p != null);
+    const minPrice = prices.length > 0 ? Math.min(...prices) : 0;
+    const formatter = new Intl.NumberFormat('es-CO', {
+      style: 'currency',
+      currency: 'COP',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    });
+    return formatter.format(minPrice).replace(/\s/g, '');
+  }
+  return '$0';
 };
 
 // Componente para mostrar las estrellas de calificación
@@ -29,16 +42,18 @@ const ProductRating = ({ rating, reviewCount }) => (
 );
 
 /**
- * A card component that displays a grouped product.
- * @param {{ group: import('../../application/services/productGrouping').GroupedProduct }} props
+ * A card component that displays a grouped product or single product.
  */
-const ProductCard = ({ group }) => {
-  // --- FORTIFICACIÓN: Guard Clause --- //
-  if (!group || !group.variants || group.variants.length === 0) {
-    console.warn("ProductCard received invalid group prop:", group);
+export default function ProductCard({ group }) {
+  if (!group) {
     return null; 
   }
-  // --- FIN FORTIFICACIÓN --- //
+
+  // Support both grouped products (group.variants) and flat product entities
+  const variants = Array.isArray(group.variants) ? group.variants : [group];
+  if (variants.length === 0) {
+    return null;
+  }
 
   const { isFavorite, toggleFavorite } = useFavorites();
   const [reviewCount, setReviewCount] = useState(group.reviewCount || null);
@@ -49,27 +64,25 @@ const ProductCard = ({ group }) => {
   }, []);
 
   useEffect(() => {
-    // This effect runs only on the client, after the initial render.
     if (group.reviewCount === undefined) {
       setReviewCount(Math.floor(Math.random() * 50) + 10);
     }
   }, [group.reviewCount]);
 
-  // A group is considered out of stock only if all its variants are.
-  const isSoldOut = group.variants.every(v => v.status === 'sold-out');
-  const firstVariant = group.variants[0];
-
-  // firstVariant is guaranteed to exist due to the guard clause, but still good to be explicit
+  const isSoldOut = variants.every(v => v.status === 'sold-out');
+  const firstVariant = variants[0];
+  const groupCode = group.groupCode || firstVariant.id;
+  const groupName = group.name || firstVariant.name || 'Producto';
+  const mainImage = group.mainImage || firstVariant.primaryImage || 'https://via.placeholder.com/400';
 
   const handleFavoriteClick = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    // Use the groupCode for favorites, as it's the unique identifier for the group
-    toggleFavorite(group.groupCode);
+    toggleFavorite(groupCode);
   };
 
-  // Fake rating for demo purposes
-  const rating = group.rating || 4;
+  const rating = group.rating || firstVariant.rating || 4;
+  const displayPriceText = formatMinPrice(group.priceRange, variants);
 
   return (
     <Link href={`/product/${firstVariant.productSlug}-${firstVariant.id}`} className="h-full">
@@ -88,34 +101,38 @@ const ProductCard = ({ group }) => {
               aria-label="Añadir a favoritos"
             >
               <Heart 
-                className={`transition-colors ${isMounted && isFavorite(group.groupCode) ? 'text-red-500 fill-current' : 'text-stone-700 dark:text-stone-300'}`} 
+                className={`transition-colors ${isMounted && isFavorite(groupCode) ? 'text-red-500 fill-current' : 'text-stone-700 dark:text-stone-300'}`} 
                 size={20} 
               />
             </button>
           )}
 
           <img
-            src={group.mainImage || 'https://via.placeholder.com/400'} 
-            alt={group.name}
+            src={mainImage} 
+            alt={groupName}
             className={`w-full h-full object-center object-cover ${!isSoldOut && 'group-hover:scale-105 transition-transform duration-300'}`}
           />
         </div>
         <div className="p-4 flex flex-col flex-grow">
-          <h3 className="text-sm sm:text-base font-medium text-stone-800 dark:text-stone-200 min-h-[2.5rem] sm:min-h-[3rem]" title={group.name}>
-            {group.name}
+          <h3 className="text-sm sm:text-base font-medium text-stone-800 dark:text-stone-200 min-h-[2.5rem] sm:min-h-[3rem]" title={groupName}>
+            {groupName}
           </h3>
           {reviewCount !== null && <ProductRating rating={rating} reviewCount={reviewCount} />}
-          
+
           <div className="flex-grow">
-            <p className="text-xl sm:text-2xl font-semibold text-stone-900 dark:text-white">
-              {formatMinPrice(group.priceRange)}
+            <p className="text-lg font-bold text-stone-900 dark:text-white mt-2">
+              {displayPriceText}
             </p>
           </div>
 
+          <div className="mt-4 pt-3 border-t border-stone-100 dark:border-stone-700 flex items-center justify-between text-xs text-stone-500 dark:text-stone-400">
+            <span className="flex items-center gap-1">
+              <Truck size={14} /> Envío nacional
+            </span>
+            <span>{variants.length} {variants.length === 1 ? 'opción' : 'opciones'}</span>
+          </div>
         </div>
       </div>
     </Link>
   );
-};
-
-export default ProductCard;
+}

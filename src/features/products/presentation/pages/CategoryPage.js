@@ -11,8 +11,8 @@ export default function CategoryPage({ products, categoryName }) {
   return (
     <>
       <Head>
-        <title>Ropa para {title} | Mundo Móvil</title>
-        <meta name="description" content={`Descubre nuestra colección de ropa deportiva para ${title}.`} />
+        <title>Tecnología en {title} | Mundo Móvil</title>
+        <meta name="description" content={`Descubre nuestra colección de dispositivos y tecnología para ${title}.`} />
       </Head>
 
       <Navbar />
@@ -23,7 +23,7 @@ export default function CategoryPage({ products, categoryName }) {
               {title}
             </h1>
             <p className="mt-4 max-w-2xl text-lg text-stone-600 dark:text-stone-400">
-              Explora nuestra selección de prendas diseñadas para el rendimiento.
+              Explora nuestra selección de dispositivos de última generación.
             </p>
           </div>
 
@@ -31,7 +31,7 @@ export default function CategoryPage({ products, categoryName }) {
           {products.length > 0 ? (
             <div className="grid grid-cols-2 gap-2 sm:gap-4 lg:gap-6 sm:grid-cols-3 lg:grid-cols-4">
               {products.map((product) => (
-                <ProductCard key={product.id} product={product} />
+                <ProductCard key={product.groupCode || product.id} group={product} />
               ))}
             </div>
           ) : (

@@ -70,7 +70,13 @@ export class InMemoryProductRepository extends IProductRepository {
   }
 
   async getProductsByCategory(categorySlug) {
-    console.warn('getProductsByCategory is not optimized for the new grouped structure.');
-    return [];
+    if (!categorySlug) return [];
+    const decodedSlug = decodeURIComponent(categorySlug).toLowerCase().trim();
+    const allGroupedProducts = await this.getAllProducts();
+    return allGroupedProducts.filter(group => {
+      const groupCategory = (group.category || '').toLowerCase().trim();
+      const slugifiedGroupCategory = groupCategory.replace(/\s+/g, '-');
+      return groupCategory === decodedSlug || slugifiedGroupCategory === decodedSlug;
+    });
   }
 }

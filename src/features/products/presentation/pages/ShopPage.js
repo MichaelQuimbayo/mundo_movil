@@ -35,7 +35,7 @@ export default function ShopPage({ products: initialProductGroups }) {
               Nuestra Colección
             </h1>
             <p className="mt-4 max-w-2xl mx-auto text-lg text-stone-600 dark:text-stone-400">
-              Explora todo nuestro catálogo de ropa y accesorios deportivos de alto rendimiento.
+              Explora todo nuestro catálogo de smartphones, accesorios y tecnología de última generación.
             </p>
           </div>
 

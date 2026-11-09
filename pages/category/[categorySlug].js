@@ -14,7 +14,7 @@ export async function getServerSideProps(context) {
   // Pasamos tanto los productos filtrados como el nombre de la categoría a la página.
   return {
     props: {
-      products,
+      products: JSON.parse(JSON.stringify(products)),
       categoryName: categorySlug,
     },
   };

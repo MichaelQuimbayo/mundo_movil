@@ -46,7 +46,11 @@ export const toDomain = (rawMaterial) => {
 
   // Rating and category are not consistently present in sample, defaulting
   const rating = rawMaterial.values?.find(v => v.entity_type === 'rating')?.value || 0;
-  const category = rawMaterial.labels?.find(l => l.entity_type === 'category')?.value || 'General';
+  const category = rawMaterial.labels?.find(l => l.entity_type === 'category')?.value ||
+                   rawMaterial.labels?.find(l => l.entity_type === 'material')?.value ||
+                   rawMaterial.material ||
+                   rawMaterial.features?.find(f => f.entity_type === 'material')?.value ||
+                   'General';
 
   // imageUrl will be a placeholder, primaryImage getter in ProductEntity will handle resources
   const imageUrl = 'https://via.placeholder.com/150';

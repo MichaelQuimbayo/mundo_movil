@@ -275,13 +275,13 @@ export default function ProductDetailPage({ productGroup: serverProductGroup, cu
                 </div>
             </div>
             <div className="mt-6 space-y-4">
-              <details className="group border-b border-stone-300 pb-4"><summary className="flex justify-between items-center cursor-pointer list-none"><span className="font-medium">Cambios y Devoluciones</span><ChevronDown className="group-open:rotate-180" /></summary><p className="mt-4 text-stone-600">Los cambios no se realizan por talla solo por defecto de fábrica y este debe ser avisado a la tienda max. 24 horas de recibir la prenda.
+              <details className="group border-b border-stone-300 pb-4"><summary className="flex justify-between items-center cursor-pointer list-none"><span className="font-medium">Cambios y Garantía</span><ChevronDown className="group-open:rotate-180" /></summary><p className="mt-4 text-stone-600">Los cambios se realizan por defecto de fábrica y deben ser avisados a la tienda máx. 24 horas después de recibir el equipo.
 
-                La prenda debe estar sin uso, sin lavar, con etiquetas originales y en perfectas condiciones.
+                El dispositivo debe estar sin uso, con sus accesorios originales, caja y en perfectas condiciones.
 
-                Las camisetas personalizadas, estampadas por pedido, con nombres, números o diseños especiales NO tienen cambio, salvo por defecto de fabricación.
+                Los equipos configurados o personalizados por pedido NO tienen cambio, salvo por defecto de fabricación.
 
-                No se aceptan cambios ni devoluciones por mal manejo del producto (lavado incorrecto, uso de secadora, plancha directa sobre el estampado, entre otros).
+                No se aceptan cambios ni devoluciones por mal manejo del producto (golpes, humedad, manipulación indebida, etc.).
 
                 No se realizan devoluciones de dinero.</p></details>
             </div>

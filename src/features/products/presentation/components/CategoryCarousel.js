@@ -1,15 +1,7 @@
-import { useRef, useState, useEffect } from 'react';
+import { useRef, useState, useEffect, useMemo } from 'react';
 import CategoryCard from './CategoryCard';
 import Link from 'next/link';
-
-const categories = [
-  { name: 'celulares', productCount: 150, image: '/images/tienda_de_ropa_deportiva.png' },
-  { name: 'smartwatches', productCount: 85, image: '/images/camisetas_de_futbol.png' },
-  { name: 'audio', productCount: 110, image: '/images/camisetas_de_futbol_02.png' },
-  { name: 'accesorios', productCount: 230, image: '/images/camisetas_de_futbol_03.png' },
-  { name: 'laptops', productCount: 45, image: '/images/camisetas_de_futbol_04.png' },
-  { name: 'gaming', productCount: 75, image: '/images/logo.png' },
-];
+import { useProducts } from '../../infrastructure/data/useProducts';
 
 const ArrowButton = ({ direction, onClick, isVisible }) => (
   <div className={`absolute top-0 bottom-0 hidden md:flex items-center z-10 ${direction === 'left' ? 'left-0' : 'right-0'}`}>
@@ -25,9 +17,37 @@ const ArrowButton = ({ direction, onClick, isVisible }) => (
 );
 
 export default function CategoryCarousel() {
+  const { products } = useProducts();
   const scrollContainerRef = useRef(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
+
+  const categories = useMemo(() => {
+    if (!products || products.length === 0) return [];
+    const catMap = new Map();
+    for (const group of products) {
+      const catName = group.category || 'General';
+      if (!catMap.has(catName)) {
+        catMap.set(catName, {
+          name: catName,
+          productCount: 0,
+          image: group.mainImage || '/images/logo.png',
+        });
+      }
+      const data = catMap.get(catName);
+      data.productCount += 1;
+      if ((!data.image || data.image.includes('placeholder')) && group.mainImage) {
+        data.image = group.mainImage;
+      }
+    }
+    return Array.from(catMap.values());
+  }, [products]);
+
+  const fallbackCategories = [
+    { name: 'celulares', productCount: 0, image: '/images/logo.png' },
+    { name: 'smartwatches', productCount: 0, image: '/images/logo.png' },
+  ];
+  const displayCategories = categories.length > 0 ? categories : fallbackCategories;
 
   const checkScrollability = () => {
     const el = scrollContainerRef.current;
@@ -50,7 +70,7 @@ export default function CategoryCarousel() {
         el.removeEventListener('scroll', checkScrollability);
       };
     }
-  }, []);
+  }, [displayCategories]);
 
   const scroll = (direction) => {
     const el = scrollContainerRef.current;
@@ -65,7 +85,7 @@ export default function CategoryCarousel() {
       <div className="max-w-[1600px] mx-auto">
         <div className="flex justify-between items-center mb-8 md:mb-12 ">
           <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-stone-900 dark:text-white">Explora por categoría</h2>
-          <Link href="/categories" className="hidden sm:inline-block  text-blue-600 dark:text-blue-400 font-semibold py-2 px-4 rounded-lg hover:bg-stone-300 dark:hover:bg-stone-600 transition-colors">Ver todas las categorias &rarr;</Link>
+          <Link href="/shop" className="hidden sm:inline-block text-blue-600 dark:text-blue-400 font-semibold py-2 px-4 rounded-lg hover:bg-stone-300 dark:hover:bg-stone-600 transition-colors">Ver todos los productos &rarr;</Link>
         </div>
         
         <div className="relative px-4 sm:px-6 lg:px-8">
@@ -73,7 +93,7 @@ export default function CategoryCarousel() {
             ref={scrollContainerRef}
             className="flex items-center space-x-4 md:space-x-8 overflow-x-auto scroll-smooth snap-x snap-mandatory touch-pan-x category-carousel hide-scrollbar-on-desktop pb-4"
           >
-            {categories.map((category) => (
+            {displayCategories.map((category) => (
               <div key={category.name} className="snap-start">
                 <CategoryCard category={category} />
               </div>
