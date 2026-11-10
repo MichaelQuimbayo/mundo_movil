@@ -2,6 +2,7 @@ import React from 'react';
 import Navbar from '../../../../shared/components/Navbar';
 import Footer from '../../../../shared/components/Footer';
 import ProductCard from '../components/ProductCard';
+import CategoryCarousel from '../components/CategoryCarousel';
 import Head from 'next/head';
 
 export default function CategoryPage({ products, categoryName }) {
@@ -17,7 +18,13 @@ export default function CategoryPage({ products, categoryName }) {
 
       <Navbar />
       <main className="bg-stone-50 dark:bg-gray-900">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-2 lg:px-4 py-2 sm:py-8">
+          
+          {/* Carrusel de Explorar por Categoría al inicio */}
+          <div className="mb-8">
+            <CategoryCarousel />
+          </div>
+
           <div className="text-left mb-12">
             <h1 className="font-serif text-4xl sm:text-5xl font-bold tracking-tight text-stone-900 dark:text-white">
               {title}

@@ -81,17 +81,17 @@ export default function CategoryCarousel() {
   };
   
   return (
-    <div className=" sm:py-10">
+    <div className="py-2 pb-8">
       <div className="max-w-[1600px] mx-auto">
-        <div className="flex justify-between items-center mb-8 md:mb-12 ">
-          <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-stone-900 dark:text-white">Explora por categoría</h2>
-          <Link href="/shop" className="hidden sm:inline-block text-blue-600 dark:text-blue-400 font-semibold py-2 px-4 rounded-lg hover:bg-stone-300 dark:hover:bg-stone-600 transition-colors">Ver todos los productos &rarr;</Link>
+        <div className="flex justify-between items-center mb-4 md:mb-6">
+          <h2 className="text-xl md:text-2xl font-bold tracking-tight text-stone-900 dark:text-white">Explora por categoría</h2>
+          <Link href="/shop" className="hidden sm:inline-block text-blue-600 dark:text-blue-400 font-semibold py-1 px-3 text-sm rounded-lg hover:bg-stone-200 dark:hover:bg-stone-700 transition-colors">Ver todos los productos &rarr;</Link>
         </div>
         
-        <div className="relative px-4 sm:px-6 lg:px-8">
+        <div className="relative px-2 sm:px-4">
           <div 
             ref={scrollContainerRef}
-            className="flex items-center space-x-4 md:space-x-8 overflow-x-auto scroll-smooth snap-x snap-mandatory touch-pan-x category-carousel hide-scrollbar-on-desktop pb-4"
+            className="flex items-center space-x-3 md:space-x-6 overflow-x-auto scroll-smooth snap-x snap-mandatory touch-pan-x category-carousel hide-scrollbar-on-desktop pb-2"
           >
             {displayCategories.map((category) => (
               <div key={category.name} className="snap-start">
