@@ -52,6 +52,10 @@ export const toDomain = (rawMaterial) => {
                    rawMaterial.features?.find(f => f.entity_type === 'material')?.value ||
                    'General';
 
+  const brand = rawMaterial.labels?.find(l => l.entity_type === 'brand' || l.entity_type === 'marca' || l.entity_type === 'fabricante')?.value ||
+                rawMaterial.features?.find(f => f.entity_type === 'brand' || f.entity_type === 'marca' || f.entity_type === 'fabricante')?.value ||
+                null;
+
   // imageUrl will be a placeholder, primaryImage getter in ProductEntity will handle resources
   const imageUrl = 'https://via.placeholder.com/150';
 
@@ -65,10 +69,12 @@ export const toDomain = (rawMaterial) => {
     status: status,
     rating: rating,
     category: category,
+    brand: brand,
     imageUrl: imageUrl,
     stock: stockValue,
     codes: rawMaterial.codes,       // Pass raw codes
     features: rawMaterial.features, // Pass raw features
     resources: rawMaterial.resources, // Pass raw resources
+    labels: rawMaterial.labels,     // Pass raw labels
   });
 };

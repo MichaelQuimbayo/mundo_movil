@@ -4,9 +4,20 @@ import Footer from '../../../../shared/components/Footer';
 import ProductCard from '../components/ProductCard';
 import { Search } from 'lucide-react';
 import { ProductEntity } from '../../domain/entities/ProductEntity';
+import { 
+  QuickBrandsBar, 
+  FilterSidebar, 
+  ActiveFiltersBar, 
+  MobileFilterButton, 
+  MobileFilterDrawer 
+} from '../components/ProductFilters';
 
 export default function ShopPage({ products: initialProductGroups }) {
   const [searchTerm, setSearchTerm] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('todos');
+  const [selectedBrands, setSelectedBrands] = useState([]);
+  const [brandSearchQuery, setBrandSearchQuery] = useState('');
+  const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
 
   // Re-hydrate plain objects from props back into ProductEntity class instances
   const productGroups = useMemo(() => 
@@ -16,20 +27,92 @@ export default function ShopPage({ products: initialProductGroups }) {
     })) : []
   , [initialProductGroups]);
 
-  const filteredProducts = useMemo(() => {
-    if (!searchTerm) {
-      return productGroups;
+  // Derive categories dynamically
+  const categories = useMemo(() => {
+    const counts = {};
+    productGroups.forEach(g => {
+      const cat = g.category || 'General';
+      counts[cat] = (counts[cat] || 0) + 1;
+    });
+
+    const list = Object.keys(counts).map(cat => ({
+      id: cat.toLowerCase().replace(/\s+/g, '-'),
+      name: cat,
+      count: counts[cat]
+    }));
+
+    return [
+      { id: 'todos', name: 'Todos', count: productGroups.length },
+      ...list
+    ];
+  }, [productGroups]);
+
+  // Derive brands dynamically
+  const brands = useMemo(() => {
+    const counts = {};
+    productGroups.forEach(g => {
+      const brand = g.brand || 'Otras Marcas';
+      counts[brand] = (counts[brand] || 0) + 1;
+    });
+
+    let list = Object.keys(counts).map(brand => ({
+      id: brand.toLowerCase().replace(/\s+/g, '-'),
+      name: brand,
+      count: counts[brand]
+    }));
+
+    if (brandSearchQuery) {
+      list = list.filter(b => b.name.toLowerCase().includes(brandSearchQuery.toLowerCase()));
     }
-    return productGroups.filter(group =>
-      group.name.toLowerCase().includes(searchTerm.toLowerCase())
+
+    return list;
+  }, [productGroups, brandSearchQuery]);
+
+  // Filter logic (AND between category and brands, OR between multiple brands)
+  const filteredProducts = useMemo(() => {
+    return productGroups.filter(group => {
+      // 1. Search term
+      if (searchTerm && !group.name.toLowerCase().includes(searchTerm.toLowerCase())) {
+        return false;
+      }
+
+      // 2. Category filter
+      if (selectedCategory && selectedCategory !== 'todos') {
+        const groupCatId = (group.category || '').toLowerCase().replace(/\s+/g, '-');
+        if (groupCatId !== selectedCategory) {
+          return false;
+        }
+      }
+
+      // 3. Brands filter (OR if multiple selected)
+      if (selectedBrands.length > 0) {
+        const groupBrandId = (group.brand || '').toLowerCase().replace(/\s+/g, '-');
+        if (!selectedBrands.includes(groupBrandId)) {
+          return false;
+        }
+      }
+
+      return true;
+    });
+  }, [productGroups, searchTerm, selectedCategory, selectedBrands]);
+
+  // Handlers
+  const handleSelectCategory = (catId) => setSelectedCategory(catId);
+  const handleToggleBrand = (brandId) => {
+    setSelectedBrands(prev => 
+      prev.includes(brandId) ? prev.filter(id => id !== brandId) : [...prev, brandId]
     );
-  }, [productGroups, searchTerm]);
+  };
+  const handleClearAll = () => {
+    setSelectedCategory('todos');
+    setSelectedBrands([]);
+  };
 
   return (
     <>
       <Navbar />
-      <main className="bg-stone-50 dark:bg-gray-900">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
+      <main className="bg-stone-50 dark:bg-gray-900 min-h-screen">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
           <div className="text-center">
             <h1 className="font-serif text-4xl sm:text-5xl font-bold tracking-tight text-stone-900 dark:text-white">
               Nuestra Colección
@@ -39,9 +122,18 @@ export default function ShopPage({ products: initialProductGroups }) {
             </p>
           </div>
 
-          {/* Buscador */}
-          <div className="mt-12 max-w-lg mx-auto">
-            <div className="relative">
+          {/* Quick Brands Bar */}
+          <div className="mt-8 border-b border-stone-200 dark:border-stone-800 pb-2">
+            <QuickBrandsBar 
+              brands={brands} 
+              selectedBrands={selectedBrands} 
+              onSelectBrand={handleToggleBrand} 
+            />
+          </div>
+
+          {/* Buscador y Botón Móvil de Filtros */}
+          <div className="mt-8 flex flex-col sm:flex-row gap-4 items-center justify-between">
+            <div className="relative w-full sm:max-w-md">
               <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
                 <Search className="h-5 w-5 text-stone-400" aria-hidden="true" />
               </div>
@@ -50,32 +142,85 @@ export default function ShopPage({ products: initialProductGroups }) {
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 placeholder="Busca en nuestra colección..."
-                className="block w-full rounded-md border-0 bg-white dark:bg-stone-800 py-3 pl-10 pr-3 text-stone-900 dark:text-stone-200 ring-1 ring-inset ring-stone-300 dark:ring-stone-700 placeholder:text-stone-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+                className="block w-full rounded-xl border-0 bg-white dark:bg-stone-800 py-3 pl-10 pr-3 text-stone-900 dark:text-stone-200 ring-1 ring-inset ring-stone-300 dark:ring-stone-700 placeholder:text-stone-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6 shadow-sm"
+              />
+            </div>
+
+            <div className="w-full sm:w-auto flex justify-end">
+              <MobileFilterButton 
+                onClick={() => setIsMobileFiltersOpen(true)} 
+                activeCount={(selectedCategory && selectedCategory !== 'todos' ? 1 : 0) + selectedBrands.length} 
               />
             </div>
           </div>
 
-          {/* Cuadrícula de Productos */}
-          <div className="mt-12">
-            {filteredProducts.length > 0 ? (
-              <div className="grid grid-cols-2 gap-2 sm:gap-4 lg:gap-6 sm:grid-cols-3 lg:grid-cols-4">
-                {filteredProducts.map((group) => (
-                  <ProductCard key={group.groupCode} group={group} />
-                ))}
+          {/* Active Filters Bar */}
+          <ActiveFiltersBar 
+            selectedCategory={selectedCategory}
+            selectedBrands={selectedBrands}
+            categories={categories}
+            brands={brands}
+            onRemoveCategory={() => setSelectedCategory('todos')}
+            onRemoveBrand={(brandId) => handleToggleBrand(brandId)}
+            onClearAll={handleClearAll}
+          />
+
+          {/* Layout Principal: Sidebar Izquierdo + Productos */}
+          <div className="mt-8 flex gap-8 items-start">
+            <FilterSidebar 
+              categories={categories}
+              brands={brands}
+              selectedCategory={selectedCategory}
+              selectedBrands={selectedBrands}
+              onSelectCategory={handleSelectCategory}
+              onToggleBrand={handleToggleBrand}
+              onSearchBrand={setBrandSearchQuery}
+              brandSearchQuery={brandSearchQuery}
+            />
+
+            <div className="flex-1">
+              {/* Contador de resultados */}
+              <div className="mb-6 text-sm text-stone-500 dark:text-stone-400">
+                Mostrando <strong className="text-stone-900 dark:text-white">{filteredProducts.length}</strong> productos encontrados
               </div>
-            ) : (
-              <div className="text-center py-16">
-                <p className="text-lg text-stone-600 dark:text-stone-400">
-                  No se encontraron productos para "<strong>{searchTerm}</strong>".
-                </p>
-                <p className="mt-2 text-sm text-stone-500">
-                  Intenta con otra búsqueda.
-                </p>
-              </div>
-            )}
+
+              {filteredProducts.length > 0 ? (
+                <div className="grid grid-cols-2 gap-2 sm:gap-4 lg:gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                  {filteredProducts.map((group) => (
+                    <ProductCard key={group.groupCode} group={group} />
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center py-16 bg-white dark:bg-stone-800 rounded-2xl border border-stone-200 dark:border-stone-700">
+                  <p className="text-lg text-stone-600 dark:text-stone-400">
+                    No se encontraron productos con los filtros seleccionados.
+                  </p>
+                  <button 
+                    onClick={handleClearAll}
+                    className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-xl text-sm font-medium hover:bg-blue-700 transition-colors"
+                  >
+                    Restablecer filtros
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </main>
+
+      <MobileFilterDrawer 
+        isOpen={isMobileFiltersOpen}
+        onClose={() => setIsMobileFiltersOpen(false)}
+        categories={categories}
+        brands={brands}
+        selectedCategory={selectedCategory}
+        selectedBrands={selectedBrands}
+        onSelectCategory={handleSelectCategory}
+        onToggleBrand={handleToggleBrand}
+        onClearAll={handleClearAll}
+        matchedCount={filteredProducts.length}
+      />
+
       <Footer />
     </>
   );

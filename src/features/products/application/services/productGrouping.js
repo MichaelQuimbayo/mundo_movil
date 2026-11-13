@@ -59,6 +59,7 @@ export const groupProducts = (materials) => {
       name,
       mainImage,
       category: firstVariant.category || 'General',
+      brand: firstVariant.productBrand || 'Otras Marcas',
       variants,
       priceRange,
     };
