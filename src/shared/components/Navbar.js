@@ -18,7 +18,7 @@ const NavLink = ({ href, children }) => {
   );
 };
 
-const Navbar = () => {
+const Navbar = ({ searchTerm, setSearchTerm }) => {
   const { cartItems } = useCart();
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -55,7 +55,7 @@ const Navbar = () => {
                 </Link>
               </div>
               <div className="hidden lg:flex justify-center w-full max-w-xl px-6">
-                <Search />
+                <Search searchTerm={searchTerm} onSearchChange={setSearchTerm} />
               </div>
             </div>
 
@@ -67,7 +67,7 @@ const Navbar = () => {
                 <NavLink href="/orders">Mis compras</NavLink>
               </div>
               <div className="lg:hidden">
-                <Search />
+                <Search searchTerm={searchTerm} onSearchChange={setSearchTerm} />
               </div>
               <button onClick={() => setIsCartOpen(true)} className="relative p-2 rounded-md text-stone-600 hover:text-stone-900">
                 <ShoppingCart size={22}/>

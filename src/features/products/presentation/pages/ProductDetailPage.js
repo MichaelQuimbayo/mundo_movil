@@ -196,8 +196,8 @@ export default function ProductDetailPage({ productGroup: serverProductGroup, cu
     <> 
       <Head><title>{`${displayVariant.name} | Mundo Móvil`}</title></Head>
       <Navbar />
-      <main className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-16 bg-white">
-        <div className="grid md:grid-cols-2 gap-x-8 lg:gap-x-16">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 dark:bg-gray-900 min-h-screen">
+        <div className="grid md:grid-cols-2 gap-x-8 lg:gap-x-16 bg-white dark:bg-stone-800 p-6 sm:p-10 rounded-2xl border border-stone-200 dark:border-stone-700 shadow-sm">
           {/* Image Section */}
           <div>
             <div className="aspect-square w-full overflow-hidden rounded-lg border-2 bg-stone-200">

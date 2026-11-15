@@ -28,14 +28,17 @@ export function QuickBrandsBar({ brands, selectedBrands, onSelectBrand }) {
   );
 }
 
-// 2. Sidebar izquierdo con categorías y marcas (checkboxes)
-export function FilterSidebar({ categories, brands, selectedCategory, selectedBrands, onSelectCategory, onToggleBrand, onSearchBrand, brandSearchQuery }) {
+// 2. Sidebar izquierdo con categorías, marcas (checkboxes) y precio máximo al final
+export function FilterSidebar({ categories, brands, selectedCategory, selectedBrands, maxPrice, onSelectCategory, onToggleBrand, onSearchBrand, brandSearchQuery, onPriceChange }) {
   return (
-    <aside className="w-64 bg-white dark:bg-stone-800 p-6 rounded-xl border border-stone-200 dark:border-stone-700 space-y-6 hidden lg:block h-fit sticky top-24">
+    <aside className="w-64 bg-white dark:bg-stone-800 p-6 rounded-xl border border-stone-200 dark:border-stone-700 space-y-6 hidden lg:block h-fit sticky top-24 shadow-sm">
       {/* Categorías */}
       <div>
-        <h3 className="text-sm font-semibold text-stone-900 dark:text-white mb-3">Categorías</h3>
-        <ul className="space-y-2">
+        <div className="flex items-center justify-between mb-3">
+          <h3 className="text-sm font-semibold text-stone-900 dark:text-white">Categorías</h3>
+          <ChevronDown size={16} className="text-stone-400" />
+        </div>
+        <ul className="space-y-1">
           {categories.map((cat) => (
             <li key={cat.id}>
               <button
@@ -75,11 +78,11 @@ export function FilterSidebar({ categories, brands, selectedCategory, selectedBr
           />
         </div>
 
-        <div className="space-y-2.5 max-h-48 overflow-y-auto pr-1">
+        <div className="space-y-2 max-h-48 overflow-y-auto pr-1">
           {brands.map((brand) => {
             const isChecked = selectedBrands.includes(brand.id);
             return (
-              <label key={brand.id} className="flex items-center justify-between cursor-pointer group text-sm">
+              <label key={brand.id} className="flex items-center justify-between cursor-pointer group text-sm py-1">
                 <div className="flex items-center space-x-3">
                   <input
                     type="checkbox"
@@ -97,13 +100,35 @@ export function FilterSidebar({ categories, brands, selectedCategory, selectedBr
           })}
         </div>
       </div>
+
+      <hr className="border-stone-200 dark:border-stone-700" />
+
+      {/* Precio Máximo (al final) */}
+      <div>
+        <h3 className="text-sm font-semibold text-stone-900 dark:text-white mb-3">Precio Máximo</h3>
+        <input 
+          type="range" 
+          min="400000" 
+          max="5000000" 
+          step="100000"
+          value={maxPrice !== undefined ? maxPrice : 5000000}
+          onChange={(e) => onPriceChange(Number(e.target.value))}
+          className="w-full accent-blue-600 cursor-pointer"
+        />
+        <div className="flex justify-between text-xs text-stone-500 mt-2 font-medium">
+          <span>$400.000</span>
+          <span className="text-blue-600 dark:text-blue-400 font-bold">
+            ${(maxPrice !== undefined ? maxPrice : 5000000).toLocaleString('es-CO')}
+          </span>
+        </div>
+      </div>
     </aside>
   );
 }
 
 // 3. Barra de Filtros Activos con botones de remover "X"
-export function ActiveFiltersBar({ selectedCategory, selectedBrands, categories, brands, onRemoveCategory, onRemoveBrand, onClearAll }) {
-  const hasActiveFilters = (selectedCategory && selectedCategory !== 'todos') || selectedBrands.length > 0;
+export function ActiveFiltersBar({ selectedCategory, selectedBrands, maxPrice, categories, brands, onRemoveCategory, onRemoveBrand, onRemovePrice, onClearAll }) {
+  const hasActiveFilters = (selectedCategory && selectedCategory !== 'todos') || selectedBrands.length > 0 || (maxPrice !== undefined && maxPrice < 5000000);
 
   if (!hasActiveFilters) return null;
 
@@ -133,6 +158,15 @@ export function ActiveFiltersBar({ selectedCategory, selectedBrands, categories,
           </span>
         );
       })}
+
+      {maxPrice !== undefined && maxPrice < 5000000 && (
+        <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-stone-100 text-stone-800 dark:bg-stone-800 dark:text-stone-200 border border-stone-200 dark:border-stone-700">
+          Precio Máx: ${maxPrice.toLocaleString('es-CO')}
+          <button onClick={onRemovePrice} className="ml-1.5 hover:text-stone-900 dark:hover:text-white">
+            <X size={14} />
+          </button>
+        </span>
+      )}
 
       <button
         onClick={onClearAll}
@@ -170,8 +204,10 @@ export function MobileFilterDrawer({
   brands, 
   selectedCategory, 
   selectedBrands, 
+  maxPrice,
   onSelectCategory, 
   onToggleBrand, 
+  onPriceChange,
   onClearAll, 
   matchedCount 
 }) {
@@ -179,7 +215,7 @@ export function MobileFilterDrawer({
 
   if (!isOpen) return null;
 
-  const activeCount = (selectedCategory && selectedCategory !== 'todos' ? 1 : 0) + selectedBrands.length;
+  const activeCount = (selectedCategory && selectedCategory !== 'todos' ? 1 : 0) + selectedBrands.length + (maxPrice < 5000000 ? 1 : 0);
 
   return (
     <div className="fixed inset-0 z-50 lg:hidden flex justify-end">
@@ -254,6 +290,26 @@ export function MobileFilterDrawer({
                 })}
               </div>
             )}
+          </div>
+
+          {/* Precio Máximo en Móvil */}
+          <div className="p-4 border border-stone-200 dark:border-stone-800 rounded-xl bg-stone-50 dark:bg-stone-800/50 space-y-3">
+            <h3 className="text-sm font-semibold text-stone-900 dark:text-white">Precio Máximo</h3>
+            <input 
+              type="range" 
+              min="400000" 
+              max="5000000" 
+              step="100000"
+              value={maxPrice !== undefined ? maxPrice : 5000000}
+              onChange={(e) => onPriceChange(Number(e.target.value))}
+              className="w-full accent-blue-600 cursor-pointer"
+            />
+            <div className="flex justify-between text-xs text-stone-500 font-medium">
+              <span>$400.000</span>
+              <span className="text-blue-600 dark:text-blue-400 font-bold">
+                ${(maxPrice !== undefined ? maxPrice : 5000000).toLocaleString('es-CO')}
+              </span>
+            </div>
           </div>
 
           {activeCount > 0 && (
