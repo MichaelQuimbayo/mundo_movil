@@ -178,17 +178,17 @@ export function ActiveFiltersBar({ selectedCategory, selectedBrands, maxPrice, c
   );
 }
 
-// 4. Botón móvil "Filtros y Marcas"
+// 4. Botón móvil "Filtro marcas"
 export function MobileFilterButton({ onClick, activeCount }) {
   return (
     <button
       onClick={onClick}
-      className="flex items-center justify-center space-x-2 w-full sm:w-auto px-4 py-2.5 bg-blue-600 text-white rounded-xl font-medium shadow-sm hover:bg-blue-700 transition-colors"
+      className="flex items-center justify-center space-x-2 px-3.5 py-2 bg-stone-100 dark:bg-stone-800 text-stone-700 dark:text-stone-200 border border-stone-200 dark:border-stone-700 rounded-lg text-sm font-medium hover:bg-stone-200 dark:hover:bg-stone-700 transition-colors shadow-sm"
     >
-      <SlidersHorizontal size={18} />
-      <span>Filtros y Marcas</span>
+      <SlidersHorizontal size={16} className="text-blue-600" />
+      <span>Filtro marcas</span>
       {activeCount > 0 && (
-        <span className="ml-1 bg-white text-blue-600 text-xs font-bold px-2 py-0.5 rounded-full">
+        <span className="ml-1 bg-blue-600 text-white text-xs font-bold px-1.5 py-0.2 rounded-full">
           {activeCount}
         </span>
       )}
@@ -196,7 +196,7 @@ export function MobileFilterButton({ onClick, activeCount }) {
   );
 }
 
-// 5. Drawer / Bottom Sheet móvil con acordeón
+// 5. Drawer / Bottom Sheet móvil optimizado y compacto
 export function MobileFilterDrawer({ 
   isOpen, 
   onClose, 
@@ -219,72 +219,72 @@ export function MobileFilterDrawer({
 
   return (
     <div className="fixed inset-0 z-50 lg:hidden flex justify-end">
-      <div className="fixed inset-0 bg-black/50 backdrop-blur-sm transition-opacity" onClick={onClose} />
+      <div className="fixed inset-0 bg-black/55 backdrop-blur-sm transition-opacity" onClick={onClose} />
 
-      <div className="relative w-full max-w-md bg-white dark:bg-stone-900 h-full flex flex-col shadow-2xl z-10">
-        <div className="flex items-center justify-between px-6 py-4 border-b border-stone-200 dark:border-stone-800">
+      <div className="relative w-full max-w-sm bg-white dark:bg-stone-900 h-full flex flex-col shadow-2xl z-10">
+        <div className="flex items-center justify-between px-5 py-3.5 border-b border-stone-200 dark:border-stone-800">
           <div className="flex items-center space-x-2">
-            <SlidersHorizontal size={20} className="text-blue-600" />
-            <h2 className="text-lg font-bold text-stone-900 dark:text-white">Filtros y Marcas</h2>
+            <SlidersHorizontal size={18} className="text-blue-600" />
+            <h2 className="text-base font-bold text-stone-900 dark:text-white">Filtro marcas</h2>
           </div>
-          <button onClick={onClose} className="p-2 rounded-full text-stone-400 hover:bg-stone-100 dark:hover:bg-stone-800">
-            <X size={20} />
+          <button onClick={onClose} className="p-1.5 rounded-full text-stone-400 hover:bg-stone-100 dark:hover:bg-stone-800">
+            <X size={18} />
           </button>
         </div>
 
-        <div className="flex-1 overflow-y-auto p-6 space-y-6">
-          <div className="border border-stone-200 dark:border-stone-800 rounded-xl overflow-hidden">
+        <div className="flex-1 overflow-y-auto p-4 space-y-4">
+          <div className="border border-stone-200 dark:border-stone-800 rounded-lg overflow-hidden">
             <button
               onClick={() => setOpenSection(openSection === 'categories' ? null : 'categories')}
-              className="w-full flex items-center justify-between p-4 bg-stone-50 dark:bg-stone-800/50 text-stone-900 dark:text-white font-semibold text-sm"
+              className="w-full flex items-center justify-between p-3 bg-stone-50 dark:bg-stone-800/50 text-stone-900 dark:text-white font-medium text-xs uppercase tracking-wider"
             >
               <span>Categorías</span>
-              <ChevronDown size={18} className={`transition-transform ${openSection === 'categories' ? 'rotate-180' : ''}`} />
+              <ChevronDown size={16} className={`transition-transform ${openSection === 'categories' ? 'rotate-180' : ''}`} />
             </button>
             {openSection === 'categories' && (
-              <div className="p-4 space-y-2 bg-white dark:bg-stone-900">
+              <div className="p-3 space-y-1.5 bg-white dark:bg-stone-900">
                 {categories.map((cat) => (
                   <button
                     key={cat.id}
                     onClick={() => onSelectCategory(cat.id)}
-                    className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm transition-colors ${
+                    className={`w-full flex items-center justify-between px-2.5 py-2 rounded-md text-xs transition-colors ${
                       selectedCategory === cat.id
-                        ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 font-medium'
+                        ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 font-semibold'
                         : 'text-stone-600 dark:text-stone-400 hover:bg-stone-50 dark:hover:bg-stone-800'
                     }`}
                   >
                     <span>{cat.name}</span>
-                    <span className="text-xs text-stone-400">{cat.count}</span>
+                    <span className="text-[10px] text-stone-400">{cat.count}</span>
                   </button>
                 ))}
               </div>
             )}
           </div>
 
-          <div className="border border-stone-200 dark:border-stone-800 rounded-xl overflow-hidden">
+          <div className="border border-stone-200 dark:border-stone-800 rounded-lg overflow-hidden">
             <button
               onClick={() => setOpenSection(openSection === 'brands' ? null : 'brands')}
-              className="w-full flex items-center justify-between p-4 bg-stone-50 dark:bg-stone-800/50 text-stone-900 dark:text-white font-semibold text-sm"
+              className="w-full flex items-center justify-between p-3 bg-stone-50 dark:bg-stone-800/50 text-stone-900 dark:text-white font-medium text-xs uppercase tracking-wider"
             >
               <span>Marcas</span>
-              <ChevronDown size={18} className={`transition-transform ${openSection === 'brands' ? 'rotate-180' : ''}`} />
+              <ChevronDown size={16} className={`transition-transform ${openSection === 'brands' ? 'rotate-180' : ''}`} />
             </button>
             {openSection === 'brands' && (
-              <div className="p-4 space-y-3 bg-white dark:bg-stone-900 max-h-60 overflow-y-auto">
+              <div className="p-3 space-y-2 bg-white dark:bg-stone-900 max-h-48 overflow-y-auto">
                 {brands.map((brand) => {
                   const isChecked = selectedBrands.includes(brand.id);
                   return (
-                    <label key={brand.id} className="flex items-center justify-between cursor-pointer text-sm">
-                      <div className="flex items-center space-x-3">
+                    <label key={brand.id} className="flex items-center justify-between cursor-pointer text-xs py-0.5">
+                      <div className="flex items-center space-x-2.5">
                         <input
                           type="checkbox"
                           checked={isChecked}
                           onChange={() => onToggleBrand(brand.id)}
-                          className="h-4 w-4 rounded border-stone-300 text-blue-600 focus:ring-blue-500"
+                          className="h-3.5 w-3.5 rounded border-stone-300 text-blue-600 focus:ring-blue-500"
                         />
                         <span className="text-stone-700 dark:text-stone-300">{brand.name}</span>
                       </div>
-                      <span className="text-xs text-stone-400">{brand.count}</span>
+                      <span className="text-[10px] text-stone-400">{brand.count}</span>
                     </label>
                   );
                 })}
@@ -293,8 +293,8 @@ export function MobileFilterDrawer({
           </div>
 
           {/* Precio Máximo en Móvil */}
-          <div className="p-4 border border-stone-200 dark:border-stone-800 rounded-xl bg-stone-50 dark:bg-stone-800/50 space-y-3">
-            <h3 className="text-sm font-semibold text-stone-900 dark:text-white">Precio Máximo</h3>
+          <div className="p-3 border border-stone-200 dark:border-stone-800 rounded-lg bg-stone-50 dark:bg-stone-800/50 space-y-2">
+            <h3 className="text-xs font-semibold text-stone-900 dark:text-white uppercase tracking-wider">Precio Máximo</h3>
             <input 
               type="range" 
               min="400000" 
@@ -302,9 +302,9 @@ export function MobileFilterDrawer({
               step="100000"
               value={maxPrice !== undefined ? maxPrice : 5000000}
               onChange={(e) => onPriceChange(Number(e.target.value))}
-              className="w-full accent-blue-600 cursor-pointer"
+              className="w-full accent-blue-600 cursor-pointer text-xs"
             />
-            <div className="flex justify-between text-xs text-stone-500 font-medium">
+            <div className="flex justify-between text-[11px] text-stone-500 font-medium">
               <span>$400.000</span>
               <span className="text-blue-600 dark:text-blue-400 font-bold">
                 ${(maxPrice !== undefined ? maxPrice : 5000000).toLocaleString('es-CO')}
@@ -315,17 +315,17 @@ export function MobileFilterDrawer({
           {activeCount > 0 && (
             <button
               onClick={onClearAll}
-              className="w-full py-2 text-center text-sm font-medium text-red-600 dark:text-red-400 hover:underline"
+              className="w-full py-1.5 text-center text-xs font-medium text-red-600 dark:text-red-400 hover:underline"
             >
               Limpiar todos los filtros
             </button>
           )}
         </div>
 
-        <div className="p-4 border-t border-stone-200 dark:border-stone-800 bg-white dark:bg-stone-900">
+        <div className="p-3.5 border-t border-stone-200 dark:border-stone-800 bg-white dark:bg-stone-900">
           <button
             onClick={onClose}
-            className="w-full py-3 bg-blue-600 text-white rounded-xl font-semibold shadow-lg hover:bg-blue-700 transition-colors flex items-center justify-center space-x-2"
+            className="w-full py-2.5 bg-blue-600 text-white rounded-lg font-semibold text-sm shadow-md hover:bg-blue-700 transition-colors flex items-center justify-center space-x-2"
           >
             <span>Ver {matchedCount} productos</span>
           </button>

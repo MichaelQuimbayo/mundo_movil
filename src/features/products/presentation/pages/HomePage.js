@@ -209,12 +209,27 @@ export default function HomePage({ testimonials, products: serverProductGroups }
                 />
               </div>
 
-              {/* Botón Móvil de Filtros siempre accesible */}
-              <div className="mt-4 flex sm:hidden justify-end">
-                <MobileFilterButton 
-                  onClick={() => setIsMobileFiltersOpen(true)} 
-                  activeCount={(selectedCategory && selectedCategory !== 'todos' ? 1 : 0) + selectedBrands.length + (maxPrice < 5000000 ? 1 : 0)} 
-                />
+              {/* Barra superior de controles en Móvil (Ordenar por a la izquierda, Filtro marcas a la derecha) */}
+              <div className="mt-4 flex sm:hidden items-center justify-between gap-3 bg-white dark:bg-stone-800 p-3 rounded-xl border border-stone-200 dark:border-stone-700 shadow-sm">
+                <div className="flex items-center space-x-2 flex-1 min-w-0">
+                  <span className="text-xs text-stone-500 whitespace-nowrap">Ordenar:</span>
+                  <select
+                    value={sortBy}
+                    onChange={(e) => setSortBy(e.target.value)}
+                    className="w-full bg-stone-50 dark:bg-stone-900 border border-stone-300 dark:border-stone-700 rounded-lg px-2.5 py-1.5 text-xs text-stone-900 dark:text-stone-200 focus:outline-none focus:ring-1 focus:ring-blue-600 truncate"
+                  >
+                    <option value="mas-destacados">Más destacados</option>
+                    <option value="precio-asc">Menor a mayor</option>
+                    <option value="precio-desc">Mayor a menor</option>
+                  </select>
+                </div>
+
+                <div className="flex-shrink-0">
+                  <MobileFilterButton 
+                    onClick={() => setIsMobileFiltersOpen(true)} 
+                    activeCount={(selectedCategory && selectedCategory !== 'todos' ? 1 : 0) + selectedBrands.length + (maxPrice < 5000000 ? 1 : 0)} 
+                  />
+                </div>
               </div>
 
               {/* Active Filters Bar */}
@@ -246,13 +261,13 @@ export default function HomePage({ testimonials, products: serverProductGroups }
                 />
 
                 <div className="flex-1 min-w-0">
-                  {/* Resultados Header Bar: Mostrando productos + Sort Combobox */}
-                  <div className="bg-white dark:bg-stone-800 p-4 rounded-xl border border-stone-200 dark:border-stone-700 shadow-sm mb-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+                  {/* Resultados Header Bar: Mostrando productos + Sort Combobox (Solo Escritorio) */}
+                  <div className="hidden sm:flex bg-white dark:bg-stone-800 p-4 rounded-xl border border-stone-200 dark:border-stone-700 shadow-sm mb-6 items-center justify-between gap-4">
                     <div className="text-sm text-stone-600 dark:text-stone-300">
                       Mostrando <strong className="text-stone-900 dark:text-white">{filteredProducts.length}</strong> productos encontrados
                     </div>
 
-                    <div className="flex items-center space-x-3 w-full sm:w-auto justify-end">
+                    <div className="flex items-center space-x-3">
                       <span className="text-xs text-stone-500 whitespace-nowrap">Ordenar por:</span>
                       <select
                         value={sortBy}
