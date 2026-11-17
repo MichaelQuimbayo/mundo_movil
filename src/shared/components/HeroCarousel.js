@@ -35,7 +35,7 @@ const HeroCarousel = ({ slides, autoPlayInterval = 5000 }) => {
   const currentSlide = slides[currentIndex];
 
   return (
-    <div className="relative w-full h-[600px]  bg-cover bg-center flex justify-center overflow-hidden">
+    <div className="relative w-full h-[400px]  bg-cover bg-center flex justify-center overflow-hidden">
       {/* Slide Content */}
       <div className="w-full h-full relative">
         {/* Background Image */}

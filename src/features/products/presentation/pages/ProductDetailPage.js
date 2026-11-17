@@ -200,13 +200,13 @@ export default function ProductDetailPage({ productGroup: serverProductGroup, cu
         <div className="grid md:grid-cols-2 gap-x-8 lg:gap-x-16 bg-white dark:bg-stone-800 p-6 sm:p-10 rounded-2xl border border-stone-200 dark:border-stone-700 shadow-sm">
           {/* Image Section */}
           <div>
-            <div className="aspect-square w-full overflow-hidden rounded-lg border-2 bg-stone-200">
+            <div className="aspect-square m-6 w-full overflow-hidden rounded-lg border-2 bg-white">
               <img src={selectedImage || 'https://via.placeholder.com/400'} alt={`${displayVariant.name} - ${displayVariant.color}`} className="w-full h-full object-contain transition-opacity duration-300" />
             </div>
             {allImages.length > 1 && (
               <div className="mt-4"><div className="flex items-center space-x-3 overflow-x-auto p-2 scrollbar-hide">
                   {allImages.map((imageUrl, index) => (
-                    <button key={index} type="button" onClick={() => dispatch({ type: 'SELECT_IMAGE', payload: { imageUrl } }) } className={`flex-shrink-0 aspect-square w-20 h-20 rounded-md overflow-hidden bg-stone-200 p-1 transition-all ${selectedImage === imageUrl ? 'ring-2 ring-blue-500' : 'opacity-70 hover:opacity-100'}`}>
+                    <button key={index} type="button" onClick={() => dispatch({ type: 'SELECT_IMAGE', payload: { imageUrl } }) } className={`flex-shrink-0 aspect-square w-20 h-20 rounded-md overflow-hidden bg-white rounded-lg border-2 p-1 transition-all ${selectedImage === imageUrl ? 'ring-2 ring-blue-500' : 'opacity-70 hover:opacity-100'}`}>
                       <img src={imageUrl} alt={`${displayVariant.name} thumbnail ${index + 1}`} className="w-full h-full object-contain" />
                     </button>
                   ))}

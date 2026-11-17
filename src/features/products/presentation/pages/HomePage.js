@@ -47,10 +47,10 @@ const BenefitsSection = () => (
     <div className="max-w-7xl mx-auto px-6 lg:px-8">
       <div className="max-w-2xl mx-auto lg:text-center">
         <h2 className="font-serif text-3xl font-bold tracking-tight text-stone-900 dark:text-white sm:text-4xl">
-          Diseñado para el Movimiento
+          Tecnología para tu Día a Día
         </h2>
         <p className="mt-6 text-lg leading-8 text-stone-600 dark:text-stone-400">
-          Cada pieza está meticulosamente confeccionada para fusionar estilo, comodidad y un rendimiento sin concesiones.
+          Cada producto integra tecnología, diseño y funcionalidad para ofrecer soluciones inteligentes que simplifican tu día a día.
         </p>
       </div>
     </div>
