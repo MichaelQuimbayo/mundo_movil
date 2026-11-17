@@ -63,9 +63,12 @@ const Footer = () => {
           </div>
         </div>
 
-        <div className="mt-12 border-t border-stone-200 dark:border-stone-700 pt-8">
-          <p className="text-base text-stone-500 dark:text-stone-400 text-center">
+        <div className="mt-12 border-t border-stone-200 dark:border-stone-700 pt-8 text-center">
+          <p className="text-base text-stone-500 dark:text-stone-400">
             &copy; {new Date().getFullYear()} Mundo Móvil. Todos los derechos reservados.
+          </p>
+          <p className="mt-2 text-sm text-stone-400 dark:text-stone-500">
+            Tu tienda de confianza en tecnología móvil y accesorios.
           </p>
         </div>
       </div>

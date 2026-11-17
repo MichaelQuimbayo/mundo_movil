@@ -14,11 +14,13 @@ export class ProductEntity {
     status, // e.g., 'available', 'sold-out'
     rating, // number
     category, // string
+    brand, // string
     imageUrl, // Primary image URL for the card (can be derived from resources)
     stock, // numerical stock for this specific variant
     codes, // Array of raw codes from API
     features, // Array of raw features (e.g., color, size) from API
     resources, // Array of raw resources (e.g., images) from API
+    labels, // Array of raw labels from API
   }) {
     this.id = id;
     this.name = name;
@@ -29,11 +31,13 @@ export class ProductEntity {
     this.status = status;
     this.rating = rating;
     this.category = category;
+    this.brand = brand;
     this.imageUrl = imageUrl; // Can be a fallback or direct from mapper
     this.stock = stock;
     this.codes = codes || []; // Store raw codes
     this.features = features || []; // Store raw features
     this.resources = resources || []; // Store raw resources
+    this.labels = labels || []; // Store raw labels
   }
 
   /**
@@ -91,6 +95,19 @@ export class ProductEntity {
   get color() {
     const colorFeature = this.features.find(f => f.entity_type === 'color');
     return colorFeature?.value || null;
+  }
+
+  /**
+   * Gets the brand of this specific product variant.
+   * @returns {string | null}
+   */
+  get productBrand() {
+    if (this.brand) return this.brand;
+    const brandLabel = this.labels.find(l => l.entity_type === 'brand' || l.entity_type === 'marca' || l.entity_type === 'fabricante');
+    if (brandLabel) return brandLabel.value;
+    
+    const brandFeature = this.features.find(f => f.entity_type === 'brand' || f.entity_type === 'marca' || f.entity_type === 'fabricante');
+    return brandFeature?.value || null;
   }
 
   /**
