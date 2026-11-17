@@ -176,6 +176,42 @@ const MobileOrderSummary = ({ cartItems, getCartTotal, shippingCost, total, isSu
     );
 };
 
+const departamentosColombia = [
+    { value: 'amazonas', label: 'Amazonas' },
+    { value: 'antioquia', label: 'Antioquia' },
+    { value: 'arauca', label: 'Arauca' },
+    { value: 'atlantico', label: 'Atlántico' },
+    { value: 'bogota', label: 'Bogotá D.C.' },
+    { value: 'bolivar', label: 'Bolívar' },
+    { value: 'boyaca', label: 'Boyacá' },
+    { value: 'caldas', label: 'Caldas' },
+    { value: 'caqueta', label: 'Caquetá' },
+    { value: 'casanare', label: 'Casanare' },
+    { value: 'cauca', label: 'Cauca' },
+    { value: 'cesar', label: 'Cesar' },
+    { value: 'choco', label: 'Chocó' },
+    { value: 'cordoba', label: 'Córdoba' },
+    { value: 'cundinamarca', label: 'Cundinamarca' },
+    { value: 'guainia', label: 'Guainía' },
+    { value: 'guaviare', label: 'Guaviare' },
+    { value: 'huila', label: 'Huila' },
+    { value: 'laguajira', label: 'La Guajira' },
+    { value: 'magdalena', label: 'Magdalena' },
+    { value: 'meta', label: 'Meta' },
+    { value: 'narino', label: 'Nariño' },
+    { value: 'nortesantander', label: 'Norte de Santander' },
+    { value: 'putumayo', label: 'Putumayo' },
+    { value: 'quindio', label: 'Quindío' },
+    { value: 'risaralda', label: 'Risaralda' },
+    { value: 'sanandres', label: 'San Andrés y Providencia' },
+    { value: 'santander', label: 'Santander' },
+    { value: 'sucre', label: 'Sucre' },
+    { value: 'tolima', label: 'Tolima' },
+    { value: 'valledelcauca', label: 'Valle del Cauca' },
+    { value: 'vaupes', label: 'Vaupés' },
+    { value: 'vichada', label: 'Vichada' }
+];
+
 export default function CheckoutWhatsapp() {
     const { cartItems, getCartTotal } = useCart();
     
@@ -213,7 +249,7 @@ export default function CheckoutWhatsapp() {
 
         // Prepare simplified payload for ToolX Cloud POS spaces-quick endpoint
         const posPayload = {
-            name: `Pedido Web - ${data.firstName || ''} ${data.lastName || ''}`.trim(),
+            name: `${data.firstName || ''} ${data.lastName || ''}`.trim(),
             order: Date.now(),
             customer: {
                 name: `${data.firstName || ''} ${data.lastName || ''}`.trim(),
@@ -289,13 +325,13 @@ export default function CheckoutWhatsapp() {
     };
 
     return (
-        <div className="bg-stone-50 min-h-screen font-sans">
+        <div className="bg-stone-50 dark:bg-gray-900 min-h-screen font-sans transition-colors duration-300">
             <Navbar />
             <main>
-                <div className="lg:grid lg:grid-cols-2">
+                <div className="max-w-7xl mx-auto lg:grid lg:grid-cols-2 shadow-sm bg-white dark:bg-stone-900/50">
 
                     {/* FORMULARIO */}
-                    <div className="py-12 px-4 sm:px-6 lg:border-r lg:pl-12 xl:pl-20 lg:pb-12">
+                    <div className="py-12 px-4 sm:px-6 lg:border-r border-stone-200 dark:border-stone-800 lg:pl-12 xl:pl-20 lg:pb-12">
                         <div className="max-w-2xl lg:w-full lg:ml-auto lg:mr-8">
 
                             <div className="mb-6 bg-emerald-50 border border-emerald-200 p-4 rounded-lg flex items-center gap-3 text-emerald-800">
@@ -353,7 +389,7 @@ export default function CheckoutWhatsapp() {
                                         <SelectField
                                             id="state"
                                             label="Provincia / Estado"
-                                            options={[{ value: 'meta', label: 'Meta' }]}
+                                            options={departamentosColombia}
                                         />
 
                                         <InputField id="postalCode" label="Código postal" optional />
@@ -457,7 +493,7 @@ export default function CheckoutWhatsapp() {
                                                 <SelectField
                                                     id="billing_state"
                                                     label="Provincia / Estado"
-                                                    options={[{ value: 'meta', label: 'Meta' }]}
+                                                    options={departamentosColombia}
                                                 />
                                                 <InputField id="billing_postalCode" label="Código postal" optional />
                                                 <div className="col-span-2 relative">
