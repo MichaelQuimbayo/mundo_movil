@@ -320,7 +320,7 @@ export default function CheckoutWhatsapp() {
         message += `_Quedo atento a la confirmación de mi pedido. ¡Gracias!_`;
 
         // WhatsApp number for Mundo Móvil
-        const whatsappNumber = '573228912297'; // Replace with actual store number
+        const whatsappNumber = '573222688209'; // Replace with actual store number
         const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
 
         window.open(whatsappUrl, '_blank');
