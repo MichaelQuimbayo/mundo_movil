@@ -1,5 +1,5 @@
 import { IProductRepository } from '../../domain/repositories/IProductRepository';
-import { toDomain } from '../mappers/ProductMapper';
+import { toDomain, isProductModification } from '../mappers/ProductMapper';
 import { groupProducts } from '../../application/services/productGrouping';
 
 const API_URL = 'https://us-central1-toolx-cloud-pos.cloudfunctions.net/api/v1/workspaces/mundo-movil/materials';
@@ -23,7 +23,9 @@ export class InMemoryProductRepository extends IProductRepository {
       }
       const rawMaterials = await response.json();
 
-      const productEntities = rawMaterials.map(material => toDomain(material));
+      const filteredMaterials = rawMaterials.filter(material => !isProductModification(material));
+
+      const productEntities = filteredMaterials.map(material => toDomain(material));
       
       const grouped = groupProducts(productEntities);
 
@@ -45,7 +47,8 @@ export class InMemoryProductRepository extends IProductRepository {
       }
       const rawMaterials = await response.json();
       const rawMaterial = rawMaterials.find(m => m.id === id);
-      return rawMaterial ? toDomain(rawMaterial) : null;
+      if (!rawMaterial || isProductModification(rawMaterial)) return null;
+      return toDomain(rawMaterial);
     } catch (error) {
       console.error(`Error fetching product with ID ${id}:`, error);
       return null;

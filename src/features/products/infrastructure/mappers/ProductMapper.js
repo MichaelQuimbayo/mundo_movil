@@ -11,6 +11,76 @@ function slugify(text) {
 }
 
 /**
+ * Checks if a raw material from the API is a product modification (only for POS, not for web display).
+ * @param {object} rawMaterial The raw material object from the API.
+ * @returns {boolean} True if it is a product modification.
+ */
+export const isProductModification = (rawMaterial) => {
+  if (!rawMaterial) return false;
+
+  // Check direct boolean/string/number properties
+  if (
+    rawMaterial.is_modification === true ||
+    rawMaterial.is_modification === 'SI' ||
+    rawMaterial.is_modification === 1 ||
+    rawMaterial.is_modification === 'true' ||
+    rawMaterial.is_modifier === true ||
+    rawMaterial.is_modifier === 'SI' ||
+    rawMaterial.is_modifier === 1 ||
+    rawMaterial.is_modifier === 'true' ||
+    rawMaterial.is_product_modification === true ||
+    rawMaterial.is_product_modification === 'SI' ||
+    rawMaterial.is_product_modification === 1 ||
+    rawMaterial.modificacion === true ||
+    rawMaterial.modificacion === 'SI' ||
+    rawMaterial.modificacion === 1
+  ) {
+    return true;
+  }
+
+  // Check type feature or property
+  const typeFeature = rawMaterial.features?.find(f => f.entity_type === 'type');
+  if (
+    rawMaterial.type === 'modificacion' ||
+    rawMaterial.type === 'modification' ||
+    rawMaterial.type === 'modifier' ||
+    typeFeature?.value === 'modificacion' ||
+    typeFeature?.value === 'modification' ||
+    typeFeature?.value === 'modifier'
+  ) {
+    return true;
+  }
+
+  // Check labels
+  if (Array.isArray(rawMaterial.labels)) {
+    const hasModLabel = rawMaterial.labels.some(l => {
+      const et = (l.entity_type || '').toLowerCase();
+      const val = (l.value || '').toString().toLowerCase();
+      return (
+        (et.includes('modification') || et.includes('modificacion') || et.includes('modifier')) &&
+        (val === 'si' || val === 'true' || val === '1')
+      );
+    });
+    if (hasModLabel) return true;
+  }
+
+  // Check features
+  if (Array.isArray(rawMaterial.features)) {
+    const hasModFeature = rawMaterial.features.some(f => {
+      const et = (f.entity_type || '').toLowerCase();
+      const val = (f.value || '').toString().toLowerCase();
+      return (
+        (et.includes('modification') || et.includes('modificacion') || et.includes('modifier')) &&
+        (val === 'si' || val === 'true' || val === '1')
+      );
+    });
+    if (hasModFeature) return true;
+  }
+
+  return false;
+};
+
+/**
  * Maps a raw API material object to a clean ProductEntity.
  * @param {object} rawMaterial The raw material object from the API.
  * @returns {ProductEntity} An instance of the clean ProductEntity.

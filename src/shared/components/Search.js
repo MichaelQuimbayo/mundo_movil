@@ -28,31 +28,32 @@ const SearchModal = ({ open, onClose, query, setQuery }) => {
 
   const modalContent = (
     <div
-        className="fixed inset-0 z-50 bg-black/30 backdrop-blur-sm"
+        className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-start justify-center"
         onClick={onClose}
     >
         <div
-            className="mx-auto mt-[10vh] w-full max-w-2xl overflow-hidden rounded-xl bg-white shadow-2xl dark:bg-stone-900 border border-stone-200 dark:border-stone-700"
+            className="mx-3 my-4 sm:mx-auto sm:mt-[10vh] w-full max-w-2xl max-h-[85vh] overflow-hidden rounded-xl bg-white shadow-2xl dark:bg-stone-900 border border-stone-200 dark:border-stone-700 flex flex-col"
             onClick={(e) => e.stopPropagation()}
         >
-            <div className="flex items-center gap-3 border-b border-stone-200 dark:border-stone-700 px-5 py-4">
-                <SearchIcon className="h-5 w-5 text-gray-400" />
+            <div className="flex items-center gap-3 border-b border-stone-200 dark:border-stone-700 px-4 py-3 sm:px-5 sm:py-4 flex-shrink-0">
+                <SearchIcon className="h-5 w-5 text-gray-400 flex-shrink-0" />
                 <input
                     autoFocus
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
                     placeholder="Buscar celulares, marcas, accesorios..."
-                    className="flex-1 bg-transparent outline-none text-sm text-stone-900 dark:text-stone-100"
+                    className="flex-1 bg-transparent outline-none text-base sm:text-sm text-stone-900 dark:text-stone-100"
                 />
                 {query && (
-                    <button onClick={() => setQuery("")} className="text-gray-400 hover:text-stone-600">
-                        <X size={16} />
+                    <button onClick={() => setQuery("")} className="text-gray-400 hover:text-stone-600 p-1">
+                        <X size={18} />
                     </button>
                 )}
-                <button onClick={onClose} className="text-xs font-medium text-gray-500 dark:text-gray-400 border border-stone-200 dark:border-stone-700 px-2 py-1 rounded">ESC</button>
+                <button onClick={onClose} className="hidden sm:block text-xs font-medium text-gray-500 dark:text-gray-400 border border-stone-200 dark:border-stone-700 px-2 py-1 rounded">ESC</button>
+                <button onClick={onClose} className="sm:hidden text-xs font-medium text-stone-600 dark:text-stone-300 p-1">Cerrar</button>
             </div>
 
-            <div className="max-h-96 overflow-y-auto p-4">
+            <div className="flex-1 overflow-y-auto p-3 sm:p-4">
                 {query ? (
                     matchingProducts.length > 0 ? (
                         <div className="space-y-2">

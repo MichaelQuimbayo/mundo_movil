@@ -196,17 +196,17 @@ export default function ProductDetailPage({ productGroup: serverProductGroup, cu
     <> 
       <Head><title>{`${displayVariant.name} | Mundo Móvil`}</title></Head>
       <Navbar />
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 dark:bg-gray-900 min-h-screen">
-        <div className="grid md:grid-cols-2 gap-x-8 lg:gap-x-16 bg-white dark:bg-stone-800 p-6 sm:p-10 rounded-2xl border border-stone-200 dark:border-stone-700 shadow-sm">
+      <main className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-3 sm:py-6 dark:bg-gray-900 min-h-screen pb-24 md:pb-12">
+        <div className="grid md:grid-cols-2 gap-x-8 lg:gap-x-16 bg-white dark:bg-stone-800 p-4 sm:p-10 rounded-xl sm:rounded-2xl border border-stone-200 dark:border-stone-700 shadow-sm">
           {/* Image Section */}
           <div>
-            <div className="aspect-square m-6 w-full overflow-hidden rounded-lg border-2 bg-white">
+            <div className="aspect-square w-full overflow-hidden rounded-lg border-2 bg-white">
               <img src={selectedImage || 'https://via.placeholder.com/400'} alt={`${displayVariant.name} - ${displayVariant.color}`} className="w-full h-full object-contain transition-opacity duration-300" />
             </div>
             {allImages.length > 1 && (
               <div className="mt-4"><div className="flex items-center space-x-3 overflow-x-auto p-2 scrollbar-hide">
                   {allImages.map((imageUrl, index) => (
-                    <button key={index} type="button" onClick={() => dispatch({ type: 'SELECT_IMAGE', payload: { imageUrl } }) } className={`flex-shrink-0 aspect-square w-20 h-20 rounded-md overflow-hidden bg-white rounded-lg border-2 p-1 transition-all ${selectedImage === imageUrl ? 'ring-2 ring-blue-500' : 'opacity-70 hover:opacity-100'}`}>
+                    <button key={index} type="button" onClick={() => dispatch({ type: 'SELECT_IMAGE', payload: { imageUrl } }) } className={`flex-shrink-0 aspect-square w-16 sm:w-20 h-16 sm:h-20 rounded-md overflow-hidden bg-white border-2 p-1 transition-all ${selectedImage === imageUrl ? 'ring-2 ring-blue-500' : 'opacity-70 hover:opacity-100'}`}>
                       <img src={imageUrl} alt={`${displayVariant.name} thumbnail ${index + 1}`} className="w-full h-full object-contain" />
                     </button>
                   ))}
@@ -217,23 +217,23 @@ export default function ProductDetailPage({ productGroup: serverProductGroup, cu
           {/* Details Section */}
           <div className="mt-6 md:mt-0">
             <div className="flex justify-between items-start">
-              <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight text-stone-900">{displayVariant.name}</h1>
-              <button onClick={() => toggleFavorite(displayVariant.groupCode)} className="p-2 rounded-full hover:bg-stone-100 transition-colors ml-4">
+              <h1 className="text-xl sm:text-3xl font-semibold tracking-tight text-stone-900 dark:text-stone-100">{displayVariant.name}</h1>
+              <button onClick={() => toggleFavorite(displayVariant.groupCode)} className="p-2 rounded-full hover:bg-stone-100 dark:hover:bg-stone-700 transition-colors ml-4">
                 <Heart className={`transition-colors ${isMounted && isFavorite(displayVariant.groupCode) ? 'text-red-500 fill-current' : 'text-stone-500'}`} size={24}/>
               </button>
             </div>
             <div className="mt-3 space-y-3">
-              <p className="text-stone-600 text-sm sm:text-base leading-relaxed">{displayVariant.description}</p>
+              <p className="text-stone-600 dark:text-stone-300 text-sm sm:text-base leading-relaxed">{displayVariant.description}</p>
               <ProductRating rating={rating} reviewCount={reviewCount} />
             </div>
-            <p className="text-2xl sm:text-3xl font-bold text-stone-900 mt-4">{displayVariant.displayPrice}</p>
+            <p className="text-2xl sm:text-3xl font-bold text-stone-900 dark:text-white mt-4">{displayVariant.displayPrice}</p>
             <form className="mt-6 space-y-6">
               {allAvailableColors.length > 0 && (
                 <div>
-                  <h3 className="text-xs sm:text-sm font-medium text-stone-700 mb-2">Color: <span className="font-semibold text-stone-900">{selectedColor}</span></h3>
+                  <h3 className="text-xs sm:text-sm font-medium text-stone-700 dark:text-stone-300 mb-2">Color: <span className="font-semibold text-stone-900 dark:text-stone-100">{selectedColor}</span></h3>
                   <div className="flex flex-wrap gap-2">
                     {allAvailableColors.map((color) => (
-                      <button key={color} type="button" onClick={() => dispatch({ type: 'SELECT_COLOR', payload: { color, variants: productGroupEntities } })} className={`border rounded-md py-2 px-4 text-xs sm:text-sm font-medium transition-colors ${selectedColor === color ? 'bg-stone-900 text-white border-stone-900' : 'border-stone-300 hover:bg-stone-100 text-stone-800'}`}>
+                      <button key={color} type="button" onClick={() => dispatch({ type: 'SELECT_COLOR', payload: { color, variants: productGroupEntities } })} className={`border rounded-md py-2 px-4 text-xs sm:text-sm font-medium transition-colors ${selectedColor === color ? 'bg-stone-900 text-white border-stone-900 dark:bg-stone-100 dark:text-stone-900' : 'border-stone-300 dark:border-stone-600 hover:bg-stone-100 dark:hover:bg-stone-700 text-stone-800 dark:text-stone-200'}`}>
                         {color}
                       </button>
                     ))}
@@ -242,40 +242,40 @@ export default function ProductDetailPage({ productGroup: serverProductGroup, cu
               )}
               {allAvailableSizes.length > 0 && (
                 <div>
-                  <h3 className="text-xs sm:text-sm font-medium text-stone-700 mb-2">Almacenamiento</h3>
+                  <h3 className="text-xs sm:text-sm font-medium text-stone-700 dark:text-stone-300 mb-2">Almacenamiento</h3>
                   <div className="flex flex-wrap gap-2">
                     {allAvailableSizes.map((size) => (
-                      <button key={size} type="button" onClick={() => dispatch({ type: 'SELECT_SIZE', payload: { size, variants: productGroupEntities } })} disabled={!validSizesForSelectedColor.includes(size)} className={`border rounded-md py-2 px-4 text-xs sm:text-sm font-medium transition-colors ${selectedSize === size ? 'bg-stone-900 text-white border-stone-900' : 'border-stone-300 hover:bg-stone-100 text-stone-800'} ${!validSizesForSelectedColor.includes(size) ? 'opacity-30 cursor-not-allowed' : ''}`}>
+                      <button key={size} type="button" onClick={() => dispatch({ type: 'SELECT_SIZE', payload: { size, variants: productGroupEntities } })} disabled={!validSizesForSelectedColor.includes(size)} className={`border rounded-md py-2 px-4 text-xs sm:text-sm font-medium transition-colors ${selectedSize === size ? 'bg-stone-900 text-white border-stone-900 dark:bg-stone-100 dark:text-stone-900' : 'border-stone-300 dark:border-stone-600 hover:bg-stone-100 dark:hover:bg-stone-700 text-stone-800 dark:text-stone-200'} ${!validSizesForSelectedColor.includes(size) ? 'opacity-30 cursor-not-allowed' : ''}`}>
                         {size}
                       </button>
                     ))}
                   </div>
                 </div>
               )}
-              <div><p className="text-xs sm:text-sm text-stone-600">Disponible: <span className="font-medium text-stone-900">{activeVariant.stock > 0 ? activeVariant.stock : 'Agotado'}</span></p></div>
+              <div><p className="text-xs sm:text-sm text-stone-600 dark:text-stone-400">Disponible: <span className="font-medium text-stone-900 dark:text-stone-200">{activeVariant.stock > 0 ? activeVariant.stock : 'Agotado'}</span></p></div>
               <div>
-                <h3 className="text-xs sm:text-sm font-medium text-stone-700 mb-2">Cantidad</h3>
-                <div className="flex items-center border border-stone-300 rounded-md" style={{ width: 'fit-content' }}>
-                  <button type="button" onClick={() => dispatch({ type: 'SET_QUANTITY', payload: { quantity: quantity - 1 }})} className="p-2 text-stone-600 hover:text-stone-900"><Minus size={14} /></button>
-                  <span className="px-4 text-sm font-medium">{quantity}</span>
-                  <button type="button" onClick={() => dispatch({ type: 'SET_QUANTITY', payload: { quantity: quantity + 1 }})} className="p-2 text-stone-600 hover:text-stone-900 disabled:opacity-30" disabled={quantity >= activeVariant.stock}><Plus size={14} /></button>
+                <h3 className="text-xs sm:text-sm font-medium text-stone-700 dark:text-stone-300 mb-2">Cantidad</h3>
+                <div className="flex items-center border border-stone-300 dark:border-stone-600 rounded-md" style={{ width: 'fit-content' }}>
+                  <button type="button" onClick={() => dispatch({ type: 'SET_QUANTITY', payload: { quantity: quantity - 1 }})} className="p-2 text-stone-600 dark:text-stone-300 hover:text-stone-900"><Minus size={14} /></button>
+                  <span className="px-4 text-sm font-medium text-stone-900 dark:text-stone-100">{quantity}</span>
+                  <button type="button" onClick={() => dispatch({ type: 'SET_QUANTITY', payload: { quantity: quantity + 1 }})} className="p-2 text-stone-600 dark:text-stone-300 hover:text-stone-900 disabled:opacity-30" disabled={quantity >= activeVariant.stock}><Plus size={14} /></button>
                 </div>
               </div>
-              <div className="space-y-3 pt-2">
+              <div className="hidden md:block space-y-3 pt-2">
                 <button type="button" onClick={(e) => handleAction(e, 'buy')} disabled={activeVariant.stock <= 0} className="w-full bg-blue-600 text-white py-3 px-6 rounded-lg font-medium text-sm sm:text-base hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm">Comprar ahora</button>
-                <button type="button" onClick={(e) => handleAction(e, 'add')} disabled={activeVariant.stock <= 0} className="w-full bg-blue-50 border border-blue-600 text-blue-600 py-3 px-6 rounded-lg font-medium text-sm sm:text-base hover:bg-blue-100 disabled:opacity-50 disabled:cursor-not-allowed">Añadir al carrito</button>
+                <button type="button" onClick={(e) => handleAction(e, 'add')} disabled={activeVariant.stock <= 0} className="w-full bg-blue-50 dark:bg-stone-700 border border-blue-600 text-blue-600 dark:text-blue-400 py-3 px-6 rounded-lg font-medium text-sm sm:text-base hover:bg-blue-100 disabled:opacity-50 disabled:cursor-not-allowed">Añadir al carrito</button>
                 {addedToCartMessage && <div className="text-center text-green-600 text-sm font-medium"><p>{addedToCartMessage}</p></div>}
               </div>
             </form>
-            <div className="mt-10 pt-6 border-t">
-                <h3 className="text-sm font-medium text-stone-800">Nuestras redes</h3>
+            <div className="mt-10 pt-6 border-t dark:border-stone-700">
+                <h3 className="text-sm font-medium text-stone-800 dark:text-stone-200">Nuestras redes</h3>
                 <div className="flex items-center space-x-4 mt-3">
-                    <a href="#" target="_blank" rel="noopener noreferrer" className="text-stone-500 hover:text-stone-800 transition-colors"><Facebook size={24}/></a>
-                    <a href="#" target="_blank" rel="noopener noreferrer" className="text-stone-500 hover:text-stone-800 transition-colors"><Instagram size={24}/></a>
+                    <a href="#" target="_blank" rel="noopener noreferrer" className="text-stone-500 hover:text-stone-800 dark:hover:text-stone-300 transition-colors"><Facebook size={24}/></a>
+                    <a href="#" target="_blank" rel="noopener noreferrer" className="text-stone-500 hover:text-stone-800 dark:hover:text-stone-300 transition-colors"><Instagram size={24}/></a>
                 </div>
             </div>
             <div className="mt-6 space-y-4">
-              <details className="group border-b border-stone-300 pb-4"><summary className="flex justify-between items-center cursor-pointer list-none"><span className="font-medium">Cambios y Garantía</span><ChevronDown className="group-open:rotate-180" /></summary><p className="mt-4 text-stone-600">Los cambios se realizan por defecto de fábrica y deben ser avisados a la tienda máx. 24 horas después de recibir el equipo.
+              <details className="group border-b border-stone-300 dark:border-stone-700 pb-4"><summary className="flex justify-between items-center cursor-pointer list-none"><span className="font-medium text-stone-800 dark:text-stone-200">Cambios y Garantía</span><ChevronDown className="group-open:rotate-180 text-stone-600 dark:text-stone-400" /></summary><p className="mt-4 text-stone-600 dark:text-stone-400 text-sm leading-relaxed">Los cambios se realizan por defecto de fábrica y deben ser avisados a la tienda máx. 24 horas después de recibir el equipo.
 
                 El dispositivo debe estar sin uso, con sus accesorios originales, caja y en perfectas condiciones.
 
@@ -287,18 +287,29 @@ export default function ProductDetailPage({ productGroup: serverProductGroup, cu
             </div>
           </div>
         </div>
+
+        {/* Mobile Sticky Bottom Action Bar */}
+        <div className="fixed bottom-0 left-0 right-0 bg-white dark:bg-stone-900 border-t border-stone-200 dark:border-stone-700 p-3 shadow-lg z-20 flex gap-2 md:hidden items-center">
+          <button type="button" onClick={(e) => handleAction(e, 'add')} disabled={activeVariant.stock <= 0} className="flex-1 bg-stone-100 dark:bg-stone-800 border border-stone-300 dark:border-stone-600 text-stone-900 dark:text-stone-100 py-2.5 px-3 rounded-lg font-medium text-xs disabled:opacity-50">
+            Añadir
+          </button>
+          <button type="button" onClick={(e) => handleAction(e, 'buy')} disabled={activeVariant.stock <= 0} className="flex-1 bg-blue-600 text-white py-2.5 px-3 rounded-lg font-medium text-xs hover:bg-blue-700 disabled:opacity-50">
+            Comprar ahora
+          </button>
+        </div>
+
         {relatedProducts && relatedProducts.length > 0 && (
-            <section className="mt-16 py-10 border-t">
+            <section className="mt-16 py-10 border-t dark:border-stone-700">
                 <div className="relative">
-                    <h2 className="text-3xl font-bold tracking-tight text-stone-900 dark:text-white mb-8 text-center font-serif">También podría gustarte</h2>
-                    <div ref={relatedProductsContainerRef} className="flex space-x-6 overflow-x-auto pb-4 scrollbar-hide">
+                    <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-stone-900 dark:text-white mb-8 text-center font-serif">También podría gustarte</h2>
+                    <div ref={relatedProductsContainerRef} className="flex space-x-4 sm:space-x-6 overflow-x-auto pb-4 scrollbar-hide">
                       {relatedProducts.map((product) => (
-                          <div key={product.groupCode} className="w-72 flex-shrink-0">
+                          <div key={product.groupCode} className="w-64 sm:w-72 flex-shrink-0">
                               <ProductCard group={product} />
                           </div>                      ))}
                     </div>
-                    <button onClick={() => handleRelatedScroll('left')} className="absolute left-4 top-1/2 -translate-y-1/2 bg-white rounded-full p-2 shadow-md hover:bg-stone-100 transition-colors z-10"><ChevronLeft size={24}/></button>
-                    <button onClick={() => handleRelatedScroll('right')} className="absolute right-4 top-1/2 -translate-y-1/2 bg-white rounded-full p-2 shadow-md hover:bg-stone-100 transition-colors z-10"><ChevronRight size={24}/></button>
+                    <button onClick={() => handleRelatedScroll('left')} className="hidden md:flex absolute left-4 top-1/2 -translate-y-1/2 bg-white rounded-full p-2 shadow-md hover:bg-stone-100 transition-colors z-10"><ChevronLeft size={24}/></button>
+                    <button onClick={() => handleRelatedScroll('right')} className="hidden md:flex absolute right-4 top-1/2 -translate-y-1/2 bg-white rounded-full p-2 shadow-md hover:bg-stone-100 transition-colors z-10"><ChevronRight size={24}/></button>
                 </div>
             </section>
         )}

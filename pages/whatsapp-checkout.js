@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Link from 'next/link';
 import { useCart } from '../src/shared/context/CartContext';
 import Navbar from '../src/shared/components/Navbar';
 import { ChevronDown, HelpCircle, CreditCard, Building2, Truck, MessageCircle, Loader2 } from 'lucide-react';
@@ -213,16 +214,17 @@ const departamentosColombia = [
 ];
 
 export default function CheckoutWhatsapp() {
-    const { cartItems, getCartTotal } = useCart();
+    const { cartItems, getCartTotal, clearCart } = useCart();
     
     // States for selections
     const [paymentMethod, setPaymentMethod] = useState('transferencia');
     const [billingAddress, setBillingAddress] = useState('same');
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
+    const [orderSubmitted, setOrderSubmitted] = useState(false);
 
-    // Fixed shipping cost
-    const shippingCost = 18000;
+    // Fixed shipping cost (0 if contraentrega, 18000 otherwise)
+    const shippingCost = paymentMethod === 'contraentrega' ? 0 : 18000;
     const shippingLabel = 'Envío Nacional Estándar';
     const total = getCartTotal() + shippingCost;
 
@@ -318,11 +320,40 @@ export default function CheckoutWhatsapp() {
         message += `_Quedo atento a la confirmación de mi pedido. ¡Gracias!_`;
 
         // WhatsApp number for Mundo Móvil
-        const whatsappNumber = '57 322 2688209'; // Replace with actual store number
+        const whatsappNumber = '573228912297'; // Replace with actual store number
         const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
 
         window.open(whatsappUrl, '_blank');
+        setOrderSubmitted(true);
+        clearCart();
     };
+
+    if (orderSubmitted) {
+        return (
+            <div className="bg-stone-50 dark:bg-gray-900 min-h-screen font-sans transition-colors duration-300">
+                <Navbar />
+                <main className="max-w-3xl mx-auto px-4 py-16">
+                    <div className="bg-white dark:bg-stone-800 p-8 sm:p-12 rounded-2xl border border-stone-200 dark:border-stone-700 shadow-sm text-center space-y-6">
+                        <div className="w-16 h-16 bg-emerald-100 dark:bg-emerald-900/40 text-emerald-600 dark:text-emerald-400 rounded-full flex items-center justify-center mx-auto">
+                            <MessageCircle size={32} />
+                        </div>
+                        <h1 className="text-2xl sm:text-3xl font-bold text-stone-900 dark:text-stone-100">¡Pedido Enviado con Éxito!</h1>
+                        <p className="text-stone-600 dark:text-stone-300 text-base max-w-lg mx-auto">
+                            Tu pedido ha sido registrado correctamente y se ha abierto WhatsApp con los detalles para que nuestro asesor te atienda y confirme tu pedido de inmediato.
+                        </p>
+                        <div className="pt-4">
+                            <Link
+                                href="/"
+                                className="inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-8 rounded-lg shadow-md transition-colors text-base"
+                            >
+                                Seguir comprando
+                            </Link>
+                        </div>
+                    </div>
+                </main>
+            </div>
+        );
+    }
 
     return (
         <div className="bg-stone-50 dark:bg-gray-900 min-h-screen font-sans transition-colors duration-300">
@@ -413,8 +444,8 @@ export default function CheckoutWhatsapp() {
                                         <RadioSelect
                                             value="nacional"
                                             label={shippingLabel}
-                                            sublabel={formatCurrency(shippingCost)}
-                                            selected={true}
+                                            sublabel={paymentMethod === 'contraentrega' ? 'No aplica (Contra Entrega)' : formatCurrency(shippingCost)}
+                                            selected={paymentMethod !== 'contraentrega'}
                                             icon={<Truck size={20} className="text-stone-600" />}
                                         />
                                     </div>
